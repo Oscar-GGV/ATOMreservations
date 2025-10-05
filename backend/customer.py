@@ -1,4 +1,4 @@
-from address import Address 
+from backend.address import Address 
 #imports the address class
 class Customer:
     number_of_customers = 0
@@ -16,9 +16,14 @@ class Customer:
         return cls.number_of_customers
     #uses a class method to return the number of customers that is shared by all instances not just individual instance  
     @classmethod  
+    
     def add_to_customercount(cls):
         cls.number_of_customers += 1
         #used classmethod so it keeps the variable for the entire class, makes it easier to get the information later.
     
-        
+    def get_custinfo(self):
+        return { "Firstname" : self.first_name, "Lastname" :self.last_name, "Email" : self.email, "Phone number" : self.phone, "Address": self.address }
+    #returns a dictionary, might be useful later on when implementing the front end and saving data {"Key" : "Value"}
+    
+    #potential next step could be the file/database interaction(either reading/writing text files or excel)
     
