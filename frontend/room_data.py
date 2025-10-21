@@ -1,22 +1,23 @@
 rooms = [
-    {
-        "title": "Ocean View Suite",
-        "description": "2 Queen Beds, Ocean View, Breakfast Included, Sleeps 4"
-    },
-    {
-        "title": "City View Deluxe",
-        "description": "1 King Bed, City View, Free Wi-Fi, Sleeps 2"
-    },
-    {
-        "title": "Family Room",
-        "description": "2 Double Beds, Garden View, Extra Sofa Bed, Sleeps 5"
-    },
-    {
-        "title": "Penthouse",
-        "description": "1 King Bed, Private Balcony, Full Kitchen, Sleeps 2"
-    },
-    {
-        "title": "Economy Room",
-        "description": "1 Full Bed, No View, No Breakfast, Sleeps 1"
-    }
+  {
+    "title": "Standard Room",
+    "description": "1 Queen Bed, Modern Bathroom, Free Wi-Fi, Mini Fridge, Work Desk, Black-out Curtains, Sleeps 2"
+  },
+  {
+    "title": "Deluxe Room",
+    "description": "1 King Bed, City View, Modern Bathroom, Breakfast Included, Free Wi-Fi, Mini Fridge, Black-out Curtains, In-room Safe, Sleeps 2"
+  },
+  {
+    "title": "Luxury Suite",
+    "description": "2 King Beds, Living Room, Modern Bathroom, Breakfast Included, Free Wi-Fi, Sleeps 4"
+  },
+  {
+    "title": "Presidential Suite",
+    "description": "2 King Beds, Living & Dining Room, Balcony, Powder Room, City View, Free Wi-Fi, Sleeps 4"
+  },
+  {
+    "title": "Penthouse Suite",
+    "description": "1 King Bed, Rooftop Terrace, Living & Dining Room, Kitchen, City View, Free Wi-Fi, Sleeps 4"
+  }
+
 ]
