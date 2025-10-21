@@ -18,7 +18,7 @@ def build_page3(window, stacked_widget, page2_index):
     checkin_label = create_label("Check In: (not selected)", 1600, 330, window)
     checkout_label = create_label("Check Out: (not selected)", 1600, 360, window)
     guests_label = create_label("Guests: (not selected)", 1600, 390, window)
-    nights_label = create_label("Nights: (not calculated)", 1600, 410, window)
+    nights_label = create_label("Nights: (not calculated)", 1600, 420, window)
 
     # Customer Info Fields
     y = 300
