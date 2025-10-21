@@ -1,11 +1,13 @@
 from backend.address import Address
 from backend.customer import Customer
+import re #used for email validation
 
 class CustomerController:
     def __init__(self):
         self.customers = []
         #Func below creates customer and adds customer to list of Customers that will later be connected to either text file or excel
     def add_customer(self, first_name, last_name, email, phone, address):
+
         customer = Customer(first_name, last_name, email, phone, address) #uses customer.py
         self.customers.append(customer) #the customer is being appended to the customers list
         #below just used for testing
@@ -34,8 +36,14 @@ class CustomerController:
             self.customers.remove(customer) #removes from the list
             return True #return true because the remove was successful 
         return False #return false because customer does not exist in system /// could be updated later to connect to a customer not found func.
+    
+    def is_valid_email(self, email):
+        pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        return re.match(pattern, email.strip()) is not None
+    
+        
     #Might add a get total customers for the manager report later on, MUST connect to something filewise, either excel or plain text
-
+#hello this is a new change
 
 
 
