@@ -1,4 +1,4 @@
-# ✅ page2.py
+
 from helpers import create_label, create_custom_button, connect_action, create_header
 from room_box import build_room_display
 from page1 import selected_dates

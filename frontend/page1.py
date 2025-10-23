@@ -1,4 +1,4 @@
-# ✅ page1.py
+
 from helpers import create_custom_button, create_calendar, connect_action, toggle_widget, create_guest_box_with_counter, create_label, create_header
 from PyQt5.QtCore import QDate
 
