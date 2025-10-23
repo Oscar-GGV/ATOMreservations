@@ -41,4 +41,4 @@ class Hotel:
         for i in range(3):
             self.rooms.append(Room(room_id, "VIP Suite", 1, 3, 300))
             room_id += 1
-# Test change
+
