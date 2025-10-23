@@ -7,11 +7,12 @@ class CustomerController:
         self.customers = []
         #Func below creates customer and adds customer to list of Customers that will later be connected to either text file or excel
     def add_customer(self, first_name, last_name, email, phone, address):
-
-        customer = Customer(first_name, last_name, email, phone, address) #uses customer.py
+        check_if_already_exists = self.find_customer_by_email(email)
+        if check_if_already_exists:
+            return False #Customer with email already exists in the system.
+        customer = Customer(first_name, last_name, email, phone, address)
         self.customers.append(customer) #the customer is being appended to the customers list
-        #below just used for testing
-        #return f"Customer {customer}"
+        return True #Customer successfully added
     
     def find_customer_by_email(self, email): #email is customer email
         for customer in self.customers: # iterates through the list self.customers
