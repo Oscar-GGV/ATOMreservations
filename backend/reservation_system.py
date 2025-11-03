@@ -1,4 +1,4 @@
-#Reservation System.py
+#reservation_system.py
 
 from calendar import get_booked_quantity, store_booking_range, DayNode, MonthNode
 reservations_db = {}
