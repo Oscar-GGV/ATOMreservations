@@ -7,4 +7,3 @@ class Search:
         self.check_out_date = check_out_date
         self.room_type = room_type
         self.guests = guests
-    
