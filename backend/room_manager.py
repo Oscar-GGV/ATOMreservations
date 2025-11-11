@@ -50,7 +50,7 @@ class RoomManager:
             return True
         return False
     
-    # ========== CLEAN/DIRTY ROOM FEATURES ==========
+    #Clean-Dirty Room Feature
     
     def mark_room_dirty(self, room_id):
         """Mark a room as dirty (needs cleaning)"""
