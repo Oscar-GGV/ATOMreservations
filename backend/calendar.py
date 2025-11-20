@@ -1,5 +1,16 @@
 # calendar.py
 class DayNode:
+    """
+    Node representing a day in the linked list.
+    Attributes
+    ----------
+        day_number : int
+            The numerical day of the month (e.g., 1-30).
+        bookings : list of tuples
+            Each tuple contains (room_type, guantity) booked for that day.
+        next_day : DayNode or None
+            Pointer to the next day node in the linked list.
+    """
     def __init__(self, day_number):
         self.day_number = day_number
         self.bookings = []  # list of tuples (room_type, quantity)
@@ -7,36 +18,45 @@ class DayNode:
 
 
 class MonthNode:
+    """
+    Node representing a month in the linked list.
+    Attributes
+    ----------
+        month_number : int
+            The numerical month (e.g., 1–12).
+        day_list_head : DayNode or None
+            Pointer to the head of the linked list of days for this month.
+        next_month : MonthNode or None
+            Pointer to the next month node in the linked list.
+    """
     def __init__(self, month_number):
         self.month_number = month_number
         self.day_list_head = None
         self.next_month = None
 
 
-def get_booked_quantity(month, day, room_type, calendar_head):
-    """Return how many rooms of a given type are booked on a given date."""
-    month_node = calendar_head
-    while month_node and month_node.month_number != month:
-        month_node = month_node.next_month
-
-    if not month_node:
-        return 0
-
-    day_node = month_node.day_list_head
-    while day_node and day_node.day_number != day:
-        day_node = day_node.next_day
-
-    if not day_node:
-        return 0
-
-    for booked_type, qty in day_node.bookings:
-        if booked_type == room_type["name"]:
-            return qty
-    return 0
-
-
 def store_booking_range(start_month, start_day, end_month, end_day, room_type, calendar_head):
-    """Store bookings for each day in the range into the linked list."""
+    """
+    Store a booking for a specific room type over a date range in the calendar linked list.
+    Parameters
+    ----------
+        start_month : int
+            The starting month number (1-12).
+        start_day : int
+            The starting day number (1-30).
+        end_month : int
+            The ending month number (1-12).
+        end_day : int
+            The ending day number (1-30).
+        room_type : dict
+            The room type dictionary containing at leas the "name" key.
+        calendar_head : MonthNode
+            The head of the linked list representing the calendar.
+    Returns
+    -------
+        MonthNode
+            The updated head of the calendar linked list.
+    """
     month = start_month
     day = start_day
 
