@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import QWidget, QStackedWidget
 from PyQt5.QtCore import QDate, QTimer
 from models import BookingData
 from ui_components import UIFactory, HeaderComponent, GuestCounter
+from main import get_Nx, get_Ny  # Import functions to access Nx, Ny
+
 
 class HomePage:
     
@@ -16,50 +18,69 @@ class HomePage:
     
     def _build_ui(self):
         
+        Nx = get_Nx()
+        Ny = get_Ny()
+        
         # Create header without back button (home page)
         HeaderComponent(self.parent, show_back=False)
         
         # "HOTEL" text (smaller, above ELEON)
+        # Original: (370, 300)
+        # 370/1920 = 0.193, 300/1080 = 0.278
         UIFactory.create_label(
-            "HOTEL", 370, 300, self.parent,
+            "HOTEL", int(Nx / 5.19), int(Ny / 3.6), self.parent,
             "color: black; font-size: 30px; font-weight: bold;"
         )
         
         # "ELEON" text (large brand name)
+        # Original: (320, 325)
+        # 320/1920 = 0.167, 325/1080 = 0.301
         UIFactory.create_label(
-            "ELEON", 320, 325, self.parent,
+            "ELEON", int(Nx / 6), int(Ny / 3.32), self.parent,
             "color: black; font-size: 60px; font-weight: bold;"
         )
         
         
         # Create calendar (hidden by default, shown when date button clicked)
-        self.calendar = UIFactory.create_calendar(690, 425, 500, 250, self.parent)
+        # Original: (690, 425, 500, 250)
+        # 690/1920 = 0.359, 425/1080 = 0.394, 500/1920 = 0.260, 250/1080 = 0.231
+        self.calendar = UIFactory.create_calendar(
+            int(Nx / 2.78), int(Ny / 2.54), int(Nx / 3.84), int(Ny / 4.32), self.parent
+        )
         self.calendar.hide()
         
         self.calendar.clicked.connect(self._on_date_selected)
         
         # Check-in button
+        # Original: (650, 300, 300, 100)
+        # 650/1920 = 0.339, 300/1080 = 0.278, 300/1920 = 0.156, 100/1080 = 0.093
         self.checkin_button = UIFactory.create_button(
-            "Check In:        ", 650, 300, 300, 100, self.parent
+            "Check In:        ", int(Nx / 2.95), int(Ny / 3.6), int(Nx / 6.4), int(Ny / 10.8), self.parent
         )
         self.checkin_button.clicked.connect(self._toggle_calendar)
         
         # Check-out button
+        # Original: (950, 300, 300, 100)
+        # 950/1920 = 0.495, 300/1080 = 0.278, 300/1920 = 0.156, 100/1080 = 0.093
         self.checkout_button = UIFactory.create_button(
-            "Check Out:        ", 950, 300, 300, 100, self.parent
+            "Check Out:        ", int(Nx / 2.02), int(Ny / 3.6), int(Nx / 6.4), int(Ny / 10.8), self.parent
         )
         self.checkout_button.clicked.connect(self._toggle_calendar)
         
         #-----
 
         # Guests button (shows counter when clicked)
+        # Original: (1250, 300, 300, 100)
+        # 1250/1920 = 0.651, 300/1080 = 0.278, 300/1920 = 0.156, 100/1080 = 0.093
         self.guests_button = UIFactory.create_button(
-            "Guests: 1", 1250, 300, 300, 100, self.parent
+            "Guests: 1", int(Nx / 1.54), int(Ny / 3.6), int(Nx / 6.4), int(Ny / 10.8), self.parent
         )
         
         # Guest counter component (popup)
+        # Original: (1275, 425, 250, 100)
+        # 1275/1920 = 0.664, 425/1080 = 0.394, 250/1920 = 0.130, 100/1080 = 0.093
         self.guest_counter = GuestCounter(
-            1275, 425, 250, 100, self.parent, 
+            int(Nx / 1.51), int(Ny / 2.54), int(Nx / 7.68), int(Ny / 10.8), self.parent, 
             on_change=self._on_guest_count_changed #Any time the number changes
         )
         
@@ -69,8 +90,10 @@ class HomePage:
         #----
 
         # Black button to proceed to room selection
+        # Original: (1550, 300, 300, 100)
+        # 1550/1920 = 0.807, 300/1080 = 0.278, 300/1920 = 0.156, 100/1080 = 0.093
         self.availability_button = UIFactory.create_button(
-            "Check Availability", 1550, 300, 300, 100, self.parent,
+            "Check Availability", int(Nx / 1.24), int(Ny / 3.6), int(Nx / 6.4), int(Ny / 10.8), self.parent,
             "background-color: black; color: white; font-size: 20px;"
         )
         self.availability_button.clicked.connect(self._check_availability)

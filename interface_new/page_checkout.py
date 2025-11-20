@@ -6,7 +6,6 @@ from ui_components import UIFactory, HeaderComponent
 
 class CheckoutPage:
 
-    
     def __init__(self, parent: QWidget, stacked_widget: QStackedWidget):
 
         self.parent = parent
@@ -52,7 +51,6 @@ class CheckoutPage:
         self.nights_label = UIFactory.create_label(
             "Nights: (not calculated)", 1600, 420, self.parent
         )
-        
         
         # Create customer information form
         self._create_customer_form()
