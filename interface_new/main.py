@@ -3,8 +3,8 @@ from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QScrollArea
 from PyQt5.QtCore import Qt
 
 # Global screen dimensions - set at startup
-Nx = 6016  # Screen width in pixels
-Ny = 3384  # Screen height in pixels
+Nx = 2560  # Screen width in pixels
+Ny = 1664  # Screen height in pixels
 
 
 def get_Nx():
