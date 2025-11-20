@@ -1,11 +1,26 @@
+"""page_confirmation.py
+This file defines the ConfirmationPage class which displays the final booking summary
+including room details, dates, guest information, and navigation to begin a new booking.
+Programmers: 
+date of code: November th, 2025
+"""
+
 from PyQt5.QtWidgets import QWidget, QStackedWidget
 from models import BookingData, CustomerData
 from ui_components import UIFactory, HeaderComponent
 
 
 class ConfirmationPage:
+    """Controls the final confirmation screen of the Hotel Eleon booking system.
+    Displays completed booking information and allows creation of a new reservation.
+    """
 
     def __init__(self, parent: QWidget, stacked_widget: QStackedWidget):
+        """Initializes the confirmation page controller.
+        Parameters:
+            parent (QWidget): Parent widget that hosts this page.
+            stacked_widget (QStackedWidget): Navigation controller for page switching.
+        """
         self.parent = parent
         self.stacked_widget = stacked_widget
         self.booking_data = BookingData()
@@ -14,7 +29,9 @@ class ConfirmationPage:
         self._build_ui()
 
     def _build_ui(self):
-
+        """Constructs all UI components for the confirmation page,
+        including booking details and customer summary."""
+        
         HeaderComponent(self.parent, show_back=False)
 
         self.room_info_label = UIFactory.create_label(
@@ -87,14 +104,16 @@ class ConfirmationPage:
         self._setup_show_event()
 
     def _update_display(self):
+        """Updates all displayed labels with the most recent booking and customer data."""
 
+        # ROOM
         room = self.booking_data.selected_room
-
         if room:
             self.room_info_label.setText(room["title"])
         else:
             self.room_info_label.setText("(room details here)")
 
+        # DATES
         if self.booking_data.check_in:
             self.checkin_label.setText(f"Check In: {self.booking_data.check_in}")
         else:
@@ -105,8 +124,10 @@ class ConfirmationPage:
         else:
             self.checkout_label.setText("Check Out: (not selected)")
 
+        # GUESTS
         self.guests_label.setText(f"Guests: {self.booking_data.adults}")
 
+        # NIGHTS
         nights = self.booking_data.calculate_nights()
         if nights is not None:
             self.nights_label.setText(f"Nights: {nights}")
@@ -134,6 +155,9 @@ class ConfirmationPage:
             self.guest_phone_label.setText("Phone: (not provided)")
 
     def _setup_show_event(self):
+        """Overrides the parent's showEvent to refresh the confirmation display
+        each time the user navigates to this page."""
+        
         original_show = self.parent.showEvent
 
         def on_show(event):
@@ -147,4 +171,5 @@ class ConfirmationPage:
         self.parent.showEvent = on_show
 
     def _make_new(self):
+        """Navigates back to the home page to start a brand new reservation."""
         self.stacked_widget.setCurrentIndex(0)

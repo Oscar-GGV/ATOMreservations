@@ -1,3 +1,10 @@
+"""page_checkout.py
+This file defines the CheckoutPage class responsible for collecting customer
+information, displaying booking details, and navigating to final confirmation.
+Programmers: 
+date of code: November th, 2025
+"""
+
 from PyQt5.QtWidgets import QWidget, QStackedWidget
 from PyQt5.QtCore import QTimer
 from models import BookingData, CustomerData
@@ -5,19 +12,29 @@ from ui_components import UIFactory, HeaderComponent
 
 
 class CheckoutPage:
+    """Controls the checkout page of the Hotel Eleon booking system.
+    Builds customer form fields, displays booking summary, and manages navigation.
+    """
 
     def __init__(self, parent: QWidget, stacked_widget: QStackedWidget):
+        """Initializes the checkout page controller.
+        Parameters:
+            parent (QWidget): Container widget for this page.
+            stacked_widget (QStackedWidget): Navigation stack for page switching.
+        """
 
         self.parent = parent
         self.stacked_widget = stacked_widget
-        self.booking_data = BookingData()  # Model (Singleton)
-        self.customer_data = CustomerData()  # Model (Singleton)
-        self.input_fields = {}  # Store references to input fields
+        self.booking_data = BookingData()      # Model (Singleton)
+        self.customer_data = CustomerData()    # Model (Singleton)
+        self.input_fields = {}                 # Maps field keys to UI input widgets
         
         # Build the UI
         self._build_ui()
     
     def _build_ui(self):
+        """Constructs all UI elements for the checkout page,
+        including header, booking summary labels, and form fields."""
         
         # Create header with back button
         HeaderComponent(
@@ -55,30 +72,29 @@ class CheckoutPage:
         # Create customer information form
         self._create_customer_form()
         
+        # Confirmation button
         self.confirm_button = UIFactory.create_button(
             "Confirm Booking", 
             1600, 900, 
             280, 60, 
             self.parent,
-
         )
         self.confirm_button.clicked.connect(self._confirm_booking)
         
-        
-        # Setup show event to update display when page loads
+        # Setup show event to update labels when page becomes visible
         self._setup_show_event()
     
     def _create_customer_form(self):
-
+        """Creates all labeled input fields for collecting customer information.
+        Each field is stored for access and updates the model as the user types."""
         
-        y = 300  # Starting Y position
-        x = 200  # Starting X position (left side)
+        y = 300      # Starting Y position
+        x = 200      # Left column X position
         input_width = 400
         input_height = 40
-        spacing = 60  # Vertical spacing between fields
+        spacing = 60
         
-        
-        # Define all form fields (label text, field key)
+        # Define all form fields (label text, model attribute key)
         fields = [
             ("First Name:", "first_name"),
             ("Last Name:", "last_name"),
@@ -91,115 +107,111 @@ class CheckoutPage:
             ("CVV:", "cvv")
         ]
         
-        
         for label_text, field_key in fields:
             
             label = UIFactory.create_label(label_text, x, y, self.parent)
             label.setStyleSheet("font-weight: bold; font-size: 10pt;")
             
             field = UIFactory.create_input_field(
-                x + 200,  # Position after label
+                x + 200, 
                 y, 
                 input_width, 
                 input_height, 
                 self.parent
             )
             
-            # Store reference to field
+            # Track field by key
             self.input_fields[field_key] = field
             
-            # Connect to update handler (save to model as user types)
+            # Save to customer model when changed
             field.textChanged.connect(
                 lambda text, key=field_key: self._on_field_changed(key, text)
             )
             
             y += spacing
     
-    
     def _on_field_changed(self, field_key: str, text: str):
-        # Update customer data model
+        """Updates the CustomerData singleton whenever an input field changes.
+        Parameters:
+            field_key (str): Attribute name on the model.
+            text (str): New text entered by the user.
+        """
         setattr(self.customer_data, field_key, text)
     
     def _go_back_to_rooms(self):
-
+        """Navigates to the room selection page."""
         self.stacked_widget.setCurrentIndex(1)
     
     def _confirm_booking(self):
-       
-        self.stacked_widget.setCurrentIndex(3) 
+        """Navigates to the final confirmation page."""
+        self.stacked_widget.setCurrentIndex(3)
         
-    
-    
     def _update_display(self):
+        """Refreshes all booking summary labels based on the BookingData model."""
         
         room = self.booking_data.selected_room
         
         if room:
-            # Display room title and description (multi-line)
             room_text = f"{room['title']}"
             self.room_info_label.setText(room_text)
         else:
-            # No room selected
             self.room_info_label.setText("(room details here)")
         
-        
+        # Dates
         if self.booking_data.check_in:
             checkin_text = f"Check In: {self.booking_data.check_in}"
         else:
             checkin_text = "Check In: (not selected)"
-        
         self.checkin_label.setText(checkin_text)
         
         if self.booking_data.check_out:
             checkout_text = f"Check Out: {self.booking_data.check_out}"
         else:
             checkout_text = "Check Out: (not selected)"
-        
         self.checkout_label.setText(checkout_text)
         
+        # Guests
         guests_text = f"Guests: {self.booking_data.adults}"
         self.guests_label.setText(guests_text)
 
-        # Calculate nights from model
+        # Nights calculation
         nights = self.booking_data.calculate_nights()
-        
         if nights is not None:
             nights_text = f"Nights: {nights}"
         else:
             nights_text = "Nights: (not calculated)"
-        
         self.nights_label.setText(nights_text)
     
     def _flash_field_red(self, field):
-
-        # Store original style
+        """Briefly highlights an invalid input field in red.
+        Provides visual feedback and reverts style after one second."""
+        
         original_style = field.styleSheet()
         
-        # Add red border and light red background
         red_style = (
             "border: 3px solid #ff4444; "
             "background-color: #ffebeb;"
         )
         field.setStyleSheet(red_style)
         
-        # Remove red styling after 1 second (1000 milliseconds)
         QTimer.singleShot(1000, lambda: field.setStyleSheet(original_style))
     
-    
     def _setup_show_event(self):
-
+        """Overrides the parent widget's showEvent to update the display whenever
+        the page becomes visible to the user."""
+        
         original_show_event = self.parent.showEvent
         
         def on_show_event(event):
             """Update display when page is shown."""
             self._update_display()
             
-            # Call original show event if it exists
+            # Chain original showEvent if present
             if original_show_event:
                 try:
                     original_show_event(event)
                 except:
                     pass
         
-        # Attach show event handler
+        # Attach new show event handler
         self.parent.showEvent = on_show_event

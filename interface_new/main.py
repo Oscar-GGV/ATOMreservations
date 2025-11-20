@@ -1,3 +1,10 @@
+"""HotelBookingApp.py
+This file initializes and manages the main PyQt5 hotel booking application.
+It sets up the window, navigation system, and all page controllers.
+Programmers: 
+date of code: November 5th, 2025
+"""
+
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QScrollArea
 from PyQt5.QtCore import Qt
@@ -8,8 +15,13 @@ from page_confirmation import ConfirmationPage
 
 
 class HotelBookingApp:
-    
+    """Main application controller for the Hotel Eleon booking system.
+    Responsible for initializing the Qt application, window, and all pages.
+    """
+
     def __init__(self):
+        """Creates the QApplication instance and initializes the main window
+        along with all application pages."""
   
         self.app = QApplication(sys.argv)
         # required Qt object that manages the whole UI system
@@ -20,10 +32,12 @@ class HotelBookingApp:
         self._setup_pages() 
     
     
-    def _setup_main_window(self): #empty window
+    def _setup_main_window(self):
+        """Initializes the main application window and creates the stacked widget
+        used to display navigable pages."""
         
-        self.main_window = QWidget() #main application window.
-        self.main_window.setWindowTitle("Hotel Eleon - Booking System") #window bar
+        self.main_window = QWidget()  # main application window.
+        self.main_window.setWindowTitle("Hotel Eleon - Booking System")  # window bar
         self.main_window.resize(1920, 1080)
         
         # QStackedWidget manages multiple pages
@@ -33,7 +47,9 @@ class HotelBookingApp:
     
     
     def _setup_pages(self):
-
+        """Creates all application pages, initializes their controllers,
+        and inserts them into the navigation stack."""
+        
         # Create page container widget
         page_home = QWidget()
         
@@ -84,9 +100,9 @@ class HotelBookingApp:
         self.stacked_widget.setCurrentIndex(0)
     
     
-    
     def run(self):
-
+        """Shows the main window and starts the Qt event loop."""
+        
         # Show the main window
         self.main_window.show()
         
@@ -95,6 +111,9 @@ class HotelBookingApp:
 
 
 def main():
+    """Entry point of the application.
+    Creates the HotelBookingApp instance and runs it."""
+    
     app = HotelBookingApp()   # create the main application object
     app.run()                 # start the UI event loop
 
