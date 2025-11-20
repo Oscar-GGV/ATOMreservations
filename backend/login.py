@@ -1,5 +1,9 @@
-# login.py
-
+"""login.py
+This file contains the login class which handles user authentication and registration.
+Programmer: Taksh Joshi
+date of code: November 2nd, 2025
+modifications: Added default password for admin user, added password change functionality, added email validation, added user registration, added logout functionality, added user role checks
+"""
 import csv
 from datetime import datetime
 from backend.customer import Customer
@@ -7,14 +11,36 @@ from backend.customer_controller import CustomerController
 from backend.address import Address
 
 class LoginSystem:
+     """
+    This class handles the login, registration, and authentication
+    of users in the system
+    Attributes:
+    csv_file : str
+    The file path to the CSV that contains user data
+    customer_controller : CustomerController
+    Controller that manages customer data
+    current_user : dict or None
+    Information about the currently logged-in user
+    """
+
     def __init__(self, csv_file="users.csv"):
+         """
+        Initializes the LoginSystem with a given CSV file.
+         Parameters:
+        csv_file : str
+            The file path for the CSV containing user data. Defaults to 'users.csv'
+        """
         self.csv_file = csv_file
         self.customer_controller = CustomerController()
         self.current_user = None
         self.load_users()
     
     def load_users(self):
-        """Load users from CSV file"""
+          """
+        Loads the users from the CSV file and adds non-admin users to the customer controller.
+        
+        Creates the CSV file with a default admin if it doesn't exist.
+        """
         try:
             with open(self.csv_file, 'r') as file:
                 reader = csv.DictReader(file)
@@ -53,7 +79,17 @@ class LoginSystem:
             })
     
     def login(self, username, password):
-        """Authenticate user with username and password"""
+        """
+        Authenticates the user with the given username and password.
+        Parameters:
+        username : str
+        The username of the user trying to log in
+        password : str
+        The password of the user trying to log in
+        Returns:
+        tuple
+        A tuple containing a success flag and a message
+        """
         try:
             with open(self.csv_file, 'r') as file:
                 reader = csv.DictReader(file)
@@ -73,7 +109,27 @@ class LoginSystem:
             return False, "User database not found"
     
     def register(self, username, password, first_name, last_name, email, phone="", role="customer"):
-        """Register a new user"""
+         """
+        Registers a new user in the system
+        Parameters:
+        username : str
+        The username for the new user
+        password : str
+        The password for the new user
+        first_name : str
+        The first name of the new user
+        last_name : str
+        The last name of the new user
+        email : str
+        The email address of the new user
+        phone : str, optional
+        The phone number of the new user 
+        role : str, optional
+        The role of the new user (default is "customer")
+        Returns:
+        tuple
+        A tuple containing a success flag and a message
+        """
         # Validate email
         if not self.customer_controller.is_valid_email(email):
             return False, "Invalid email format"
@@ -108,7 +164,15 @@ class LoginSystem:
         return True, "Registration successful! Please login."
     
     def _username_exists(self, username):
-        """Check if username already exists"""
+         """
+        Checks if a username already exists in the system.
+         Parameters:
+         username : str
+        The username to check.
+        Returns:
+        bool
+        True if the username exists, False otherwise.
+        """
         try:
             with open(self.csv_file, 'r') as file:
                 reader = csv.DictReader(file)
@@ -120,7 +184,15 @@ class LoginSystem:
         return False
     
     def _email_exists(self, email):
-        """Check if email already exists"""
+           """
+        Checks if an email already exists in the system
+        Parameters:
+        email : str
+        The email to check
+        Returns:
+        bool
+        True if the email exists, False otherwise
+        """
         try:
             with open(self.csv_file, 'r') as file:
                 reader = csv.DictReader(file)
@@ -132,7 +204,12 @@ class LoginSystem:
         return False
     
     def logout(self):
-        """Logout current user"""
+       """
+        Logs the current user out of the system.
+        Returns:
+        tuple
+        A tuple containing a success flag and a message.
+        """
         if self.current_user:
             username = self.current_user['username']
             self.current_user = None
@@ -140,23 +217,53 @@ class LoginSystem:
         return False, "No user currently logged in"
     
     def is_logged_in(self):
-        """Check if a user is currently logged in"""
+         """
+        Checks if a user is currently logged in.
+        Returns:
+        bool
+        True if a user is logged in, False otherwise.
+        """
         return self.current_user is not None
     
     def get_current_user(self):
-        """Get current logged in user"""
+      """
+        Gets the current logged-in user.
+        Returns:
+        dict or None
+        Information about the current user, or None if no user is logged in.
+        """
         return self.current_user
     
     def is_admin(self):
-        """Check if current user is admin"""
+        """
+        Checks if the current user is an admin.
+        Returns:
+        bool
+        True if the current user is an admin, False otherwise.
+        """
         return self.current_user and self.current_user['role'] == 'admin'
     
     def is_manager(self):
-        """Check if current user is manager"""
+         """
+        Checks if the current user is a manager.
+        Returns:
+        bool
+        True if the current user is a manager, False otherwise.
+        """
         return self.current_user and self.current_user['role'] == 'manager'
     
     def change_password(self, old_password, new_password):
-        """Change password for current user"""
+        """
+        Changes the password for the currently logged-in user.
+        Parameters:
+        old_password : str
+        The current password of the user.
+        new_password : str
+        The new password for the user.
+        Returns:
+        tuple
+        A tuple containing a success flag and a message.
+        """
         if not self.current_user:
             return False, "No user logged in"
         

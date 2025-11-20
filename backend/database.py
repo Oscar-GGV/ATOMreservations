@@ -1,4 +1,9 @@
-# database.py
+"""database.py
+This file contains the database class which is used to store the rooms, room types, and other information about the hotel
+Programmer: Taksh Joshi
+date of code: October 6th, 2025
+modifications: Added a Room class and a Hotel class to store the rooms and their information
+"""
 """
 room_database = [
     {"name": "Single Room", "max_guests": 2, "features": ["1 Queen Bed", "Free WiFi", "Mini Fridge", "TV"], "quantity": 5, "price": 100},
@@ -8,7 +13,29 @@ room_database = [
 ]
 """
 class Room:
+     """
+    A room in the hotel with details like type, price, and availability
+    Attributes:
+    room_id (int): A unique number for each room
+    room_type (str): The kind of room (e.g., "Single Room", "Double Room")
+    beds (int): The number of beds in the room
+    max_guests (int): How many guests can stay in the room
+    price (float): The cost of the room per night
+    is_available (bool): Whether the room is available for booking or not
+    Methods:
+    __init__(room_id, room_type, beds, max_guests, price):
+    Sets up a new room with the given details
+    """
     def __init__(self, room_id, room_type, beds, max_guests, price):
+    """
+        Creates a room with the specified details
+    Args:
+    room_id (int): A unique ID for this room
+    room_type (str): The type of room (e.g., "Single Room")
+    beds (int): The number of beds in the room
+    max_guests (int): The maximum number of people allowed in the room
+    price (float): The price per night to stay in this room
+    """
         self.room_id = room_id
         self.room_type = room_type
         self.beds = beds
@@ -18,7 +45,22 @@ class Room:
 
 
 class Hotel:
+     """
+    A hotel that contains many rooms of different types.
+    Attributes:
+    rooms (list): A list of all the rooms in the hotel.
+    Methods:
+    __init__():
+    Sets up the hotel with a variety of rooms (like Single, Double, Family, and VIP Suites).
+    """
     def __init__(self):
+         """
+        Creates a hotel with different types of rooms. The hotel will start with:
+        - 5 Single Rooms (for 2 guests, $100 per night)
+        - 10 Double Rooms (for 4 guests, $150 per night)
+        - 6 Family Rooms (for 6 guests, $200 per night)
+        - 3 VIP Suites (for 3 guests, $300 per night)
+        """
         self.rooms = []
         room_id = 101
 
@@ -41,4 +83,3 @@ class Hotel:
         for i in range(3):
             self.rooms.append(Room(room_id, "VIP Suite", 1, 3, 300))
             room_id += 1
-// Test change
