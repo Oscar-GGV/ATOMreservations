@@ -1,23 +1,22 @@
 """models.py
-This file contains core data models used across the Hotel Eleon booking system.
-Includes singleton classes for storing booking details and customer information,
-as well as room-related classes and an in-memory repository.
+This file contains all the data classes used throughout the booking system.
+It stores booking information, customer details, and room data.
 
-Programmers: Aatghik, Mahi
+Programmers: Astghik, Mahi
 Date of code: October 28th, 2025
 
 Description:
-This file implements the Model layer of the MVC architecture. It uses the Singleton
-pattern for BookingData and CustomerData to ensure only one instance exists throughout
-the application, allowing all pages to access the same booking information. The
-RoomRepository provides centralized access to available rooms using the Repository pattern.
+This file holds the data that gets shared between all pages. BookingData stores the
+dates, guests, and selected room. CustomerData stores the customer's personal info.
+Room is a simple class for room information, and RoomRepository holds all available
+rooms. These classes make sure all pages can access the same booking information
+without passing it around manually.
 
-Important Data Structures:
-- BookingData stores: check_in (str), check_out (str), adults (int), selected_room (dict)
-- CustomerData stores: first_name, last_name, email, phone, street, zip_code, 
-  card_number, exp_date, cvv (all strings)
-- Room stores: title (str), description (str)
-- RoomRepository contains: _rooms (List[Room]) with 5 predefined rooms
+Data stored:
+- BookingData: check_in, check_out, adults, selected_room
+- CustomerData: first_name, last_name, email, phone, street, zip_code, card_number, exp_date, cvv
+- Room: title, description
+- RoomRepository: list of all rooms
 """
 
 from datetime import datetime
@@ -25,37 +24,21 @@ from typing import Optional, Dict, List
 
 
 class BookingData:
-    """Singleton class that stores all temporary booking-related data during the
-    reservation flow. This includes dates, number of adults, and selected room.
-    
-    The Singleton pattern ensures all pages access the same booking data without
-    passing it between pages. When a user selects dates on the home page, those
-    same dates appear on the room selection and checkout pages automatically.
+    """Stores all booking information that gets shared across pages.
+    Only one copy of this exists in the whole application so all pages see the same data.
     """
     
     _instance = None
     
     def __new__(cls):
-        """Ensures only one instance of BookingData is ever created.
-        
-        This method is called before __init__ and controls object creation.
-        If an instance already exists, it returns that instance instead of
-        creating a new one.
-        
-        Returns:
-            BookingData: The single shared instance of this class.
-        """
+        """Makes sure only one instance exists."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._initialized = False
         return cls._instance
     
     def __init__(self):
-        """Initializes booking data fields only once.
-        
-        The _initialized flag prevents reinitializing the data if __init__
-        is called multiple times (which happens with singletons).
-        """
+        """Sets up the booking fields with default values."""
         if self._initialized:
             return
         self._initialized = True
@@ -66,17 +49,13 @@ class BookingData:
         self.selected_room: Optional[Dict[str, str]] = None
     
     def calculate_nights(self) -> Optional[int]:
-        """Calculates the number of nights between check-in and check-out dates.
+        """Calculates how many nights between check-in and check-out.
         
-        Uses Python's datetime module to parse date strings and calculate the
-        difference. This is displayed on room selection, checkout, and confirmation pages.
-        
-        Input:
-            Uses self.check_in and self.check_out (format: "YYYY-MM-DD")
+        Takes the two date strings, converts them to date objects, and finds
+        the difference in days. Returns None if dates are missing or invalid.
         
         Returns:
-            int: Number of nights if both dates are valid
-            None: If either date is missing or dates are in invalid format
+            Number of nights, or None if can't calculate
         """
         if not self.check_in or not self.check_out:
             return None
@@ -89,11 +68,7 @@ class BookingData:
             return None
     
     def reset(self):
-        """Resets all booking fields to their initial default state.
-        
-        This would be called when starting a new reservation, clearing all
-        previously selected booking information.
-        """
+        """Clears all booking data back to defaults."""
         self.check_in = None
         self.check_out = None
         self.adults = 1
@@ -102,32 +77,21 @@ class BookingData:
 
 
 class CustomerData:
-    """Singleton class storing customer information used during checkout.
-    
-    Like BookingData, this uses the Singleton pattern so customer information
-    entered on the checkout page is available on the confirmation page without
-    passing it manually.
+    """Stores customer information entered during checkout.
+    Only one copy exists so checkout and confirmation pages see the same data.
     """
     
     _instance = None
     
     def __new__(cls):
-        """Ensures a single shared instance of CustomerData.
-        
-        Returns:
-            CustomerData: The single shared instance of this class.
-        """
+        """Makes sure only one instance exists."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._initialized = False
         return cls._instance
     
     def __init__(self):
-        """Initializes customer details only once.
-        
-        Stores personal information, address, and payment details as strings.
-        All fields start empty and are filled as user types in the checkout form.
-        """
+        """Sets up all customer fields as empty strings."""
         if self._initialized:
             return
         self._initialized = True
@@ -147,40 +111,32 @@ class CustomerData:
 
 
 class Room:
-    """Represents a hotel room with a title and descriptive features.
-    
-    Simple data class that holds room information. The description is stored
-    as a comma-separated string and can be split into individual features.
-    """
+    """Simple class that holds information about one room."""
     
     def __init__(self, title: str, description: str):
-        """Creates a Room object.
+        """Creates a room with a name and features.
         
         Parameters:
-            title (str): Room name (e.g., "Ocean View Suite")
-            description (str): Comma-separated room features (e.g., "2 Queen Beds, Ocean View")
+            title: Room name like "Ocean View Suite"
+            description: Features separated by commas
         """
         self.title = title
         self.description = description
     
     def get_description_lines(self) -> List[str]:
-        """Splits the comma-separated description into a clean list of features.
-        
-        This is used by RoomCard to display each feature as a separate bullet point.
+        """Splits the description into separate lines for display.
         
         Returns:
-            list of str: Individual description parts with whitespace removed
+            List of individual features
         """
         return [part.strip() for part in self.description.split(',')]
 
 
 
 class RoomRepository:
-    """Simple in-memory repository containing all room definitions.
-    
-    Uses the Repository pattern to centralize room data access. All rooms are
-    stored in a class-level list, so they're shared across all instances.
-    In a real application, this would connect to a database instead.
+    """Holds all the rooms available in the hotel.
+    This is where all room data is stored in the application.
+    This is temperaraly was made to do testing, the actual data with more infromaton was done by backend
     """
     
     _rooms: List[Room] = [
@@ -193,12 +149,9 @@ class RoomRepository:
     
     @classmethod
     def get_all_rooms(cls) -> List[Room]:
-        """Returns a list of all predefined Room objects.
-        
-        Called by RoomSelectionPage to get rooms for display. Using a class method
-        means we don't need to create an instance of RoomRepository.
+        """Returns the list of all available rooms.
         
         Returns:
-            List[Room]: All 5 available rooms
+            List of all 5 rooms
         """
         return cls._rooms

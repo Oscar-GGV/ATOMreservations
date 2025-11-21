@@ -1,16 +1,15 @@
 """page_rooms.py
-This file defines the RoomSelectionPage class which displays all available rooms
-as selectable cards, shows booking summary information, and navigates to checkout.
+This file creates the room selection page where users can see and pick rooms.
+It shows available rooms as cards and displays the booking summary.
 
 Programmers: Astghik, Mahi
 Date of code: November 8th, 2025
 
 Description:
-This page (index 1 in navigation) displays available rooms after the user checks
-availability. It shows a booking summary at the top (dates, guests, nights) and
-creates a grid of room cards below. Room data comes from RoomRepository and each
-card is clickable to select that room. Uses a grid layout algorithm to arrange
-rooms 3 per row and automatically calculates the needed page height.
+This page (index 1) appears after user checks availability. It shows booking info
+at the top (dates, guests, nights) and displays all available rooms in a grid below.
+Room data comes from RoomRepository. Each room is shown as a card with a select button.
+When user picks a room, it saves to BookingData and goes to checkout page.
 """
 
 from PyQt5.QtWidgets import QWidget, QStackedWidget
@@ -19,92 +18,68 @@ from ui_components import UIFactory, HeaderComponent, RoomCard
 
 
 class RoomSelectionPage:
-    """Controls the room selection screen of the Hotel Eleon booking system.
-    
-    This View displays booking summary and available rooms. It pulls booking info
-    from BookingData singleton to show dates and guests, gets room data from
-    RoomRepository, and creates RoomCard components for each room. When a room
-    is selected, it saves the choice to BookingData and navigates to checkout.
+    """Builds and controls the room selection page.
+    Shows booking summary and creates room cards from repository data.
     """
 
     def __init__(self, parent: QWidget, stacked_widget: QStackedWidget):
-        """Initializes the room selection controller.
-        
-        Sets up references to navigation and BookingData singleton, then builds
-        all UI elements including summary labels and room grid.
+        """Sets up the room selection page.
         
         Parameters:
-            parent (QWidget): Container widget for this page.
-            stacked_widget (QStackedWidget): Page navigation controller.
+            parent: Widget container for this page
+            stacked_widget: Navigation controller to switch pages
         """
         self.parent = parent
         self.stacked_widget = stacked_widget
-        self.booking_data = BookingData()  # Model (Singleton)
+        self.booking_data = BookingData()
         
-        # Build the UI
         self._build_ui()
     
 
     def _build_ui(self):
-        """Constructs all UI elements, including header, summary labels,
-        and the grid of room cards.
+        """Creates all UI elements on this page.
         
-        Creates a header with back button at the top, four summary labels on the
-        left (check-in, check-out, guests, nights), and a grid of room cards in
-        the center. The page is wrapped in a scroll area (set up in main.py) to
-        handle overflow when there are many rooms.
+        Builds header with back button, summary labels on the left showing dates
+        and guests, and room cards in a grid layout.
         """
         
-        # Create header with back button
+        # Header with back button
         HeaderComponent(
             self.parent, 
             show_back=True, 
             back_callback=self._go_back_to_home
         )
 
-        # Check-in date label
+        # Booking summary labels
         self.checkin_label = UIFactory.create_label(
             "Check In: (not selected)", 50, 200, self.parent
         )
         
-        # Check-out date label
         self.checkout_label = UIFactory.create_label(
             "Check Out: (not selected)", 50, 230, self.parent
         )
         
-        # Number of guests label
         self.guests_label = UIFactory.create_label(
             "Guests: (not selected)", 50, 260, self.parent
         )
         
-        # Number of nights label (calculated later)
         self.nights_label = UIFactory.create_label(
             "Nights: (not calculated)", 50, 290, self.parent
         )
 
-        # Create grid of room cards (3 per row)
+        # Create grid of room cards
         self._create_room_grid()
 
-        # Setup show event to update summary when page loads
+        # Update labels when page shows
         self._setup_show_event()
 
     
     def _create_room_grid(self):
-        """Builds the grid of RoomCard widgets based on the repository.
+        """Creates room cards arranged in a grid, 3 per row.
         
-        This implements a grid layout algorithm that arranges rooms in rows of 3.
-        The algorithm:
-        1. Gets all rooms from RoomRepository
-        2. Places rooms left to right, then moves to next row after 3 cards
-        3. Uses modulo operator (%) to detect when to wrap to new row
-        4. Calculates total height needed using ceiling division
-        5. Sets parent minimum height so scroll area works properly
-        
-        We chose this grid approach over a vertical list because it uses screen
-        space more efficiently and lets users see multiple rooms at once.
-        
-        Data Structure: Uses enumerate to track both index and room object in the loop,
-        which is needed for the modulo calculation to determine row wrapping.
+        Gets all rooms from repository and places them in rows. Uses a loop
+        to position each card, moving to next row after every 3 cards.
+        Also calculates how tall the page needs to be for all rooms.
         """
         
         rooms = RoomRepository.get_all_rooms()
@@ -114,42 +89,38 @@ class RoomSelectionPage:
         spacing = 20
         max_per_row = 3
         
-        # Starting position
+        # Starting position for first card
         x_start = 500
         y_start = 300
         x = x_start
         y = y_start
         
         for idx, room in enumerate(rooms):
-            # Create room card at current position
+            # Create card at current position
             RoomCard(x, y, self.parent, room, self._on_room_selected)
             
-            # Calculate next position
+            # Figure out next position
             if (idx + 1) % max_per_row == 0:
+                # Move to next row
                 x = x_start
                 y += room_height + spacing
             else:
+                # Move to next column
                 x += room_width + spacing
         
-        # Calculate minimum height needed for full grid
+        # Calculate total height needed for all rooms
         needed_rows = (len(rooms) + max_per_row - 1) // max_per_row
         total_height = y_start + needed_rows * (room_height + spacing) + 100
         self.parent.setMinimumHeight(total_height)
     
     
     def _on_room_selected(self, title: str, description: str):
-        """Handles selection of a room card.
-        
-        This is a callback function passed to each RoomCard, implementing the
-        Delegation pattern. When a user clicks "Select" on any room card, that
-        card delegates the action back to this page controller.
-        
-        Saves the selected room as a dictionary to BookingData singleton so it's
-        available on checkout and confirmation pages, then navigates to checkout.
+        """Called when user clicks select on a room card.
+        Saves the room choice and goes to checkout page.
         
         Parameters:
-            title (str): Selected room title (e.g., "Ocean View Suite").
-            description (str): Selected room description with features.
+            title: Name of selected room
+            description: Room features
         """
         
         self.booking_data.selected_room = {
@@ -157,26 +128,17 @@ class RoomSelectionPage:
             "description": description
         }
         
-        # Navigate to checkout page
+        # Go to checkout
         self.stacked_widget.setCurrentIndex(2)
     
     def _go_back_to_home(self):
-        """Navigates back to the home page.
-        
-        Changes stacked widget index to 0 (home page). This allows users to
-        change their dates or guest count if needed.
-        """
+        """Goes back to home page when back button clicked."""
         self.stacked_widget.setCurrentIndex(0)
     
     
     def _update_summary_labels(self):
-        """Updates summary labels (check-in, check-out, guests, nights)
-        using data from the BookingData model.
-        
-        Pulls current booking information from BookingData singleton and updates
-        all four summary labels. The nights value is calculated by calling
-        calculate_nights() method on BookingData. This method is called automatically
-        when the page is shown to ensure labels always display current data.
+        """Updates all the summary labels with current booking info.
+        Gets data from BookingData and displays it.
         """
         
         if self.booking_data.check_in:
@@ -194,7 +156,7 @@ class RoomSelectionPage:
         guests_text = f"Guests: {self.booking_data.adults}"
         self.guests_label.setText(guests_text)
         
-        # Calculate nights from model
+        # Calculate and show nights
         nights = self.booking_data.calculate_nights()
         
         if nights is not None:
@@ -206,26 +168,19 @@ class RoomSelectionPage:
     
  
     def _setup_show_event(self):
-        """Overrides the parent widget's showEvent so that summary labels
-        refresh every time the room selection page is shown.
-        
-        This ensures the booking summary is always up-to-date, even if the user
-        navigates back from checkout to change their room selection. Preserves
-        any existing showEvent by chaining it after our update logic.
+        """Makes labels update automatically when page is shown.
+        This keeps the summary current if user goes back and changes dates.
         """
         
         original_show_event = self.parent.showEvent
         
         def on_show_event(event):
-            """Update summary when page is shown."""
             self._update_summary_labels()
             
-            # Call original show event if it exists
             if original_show_event:
                 try:
                     original_show_event(event)
                 except:
                     pass
         
-        # Attach show event handler
         self.parent.showEvent = on_show_event
