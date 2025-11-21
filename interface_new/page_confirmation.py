@@ -1,8 +1,16 @@
 """page_confirmation.py
 This file defines the ConfirmationPage class which displays the final booking summary
 including room details, dates, guest information, and navigation to begin a new booking.
-Programmers: 
-date of code: November th, 2025
+
+Programmers: Astghik, Mahi
+Date of code: November 12th, 2025
+
+Description:
+This is the final page (index 3 in navigation) that shows a complete summary of the
+booking after the user confirms. It displays all information from both BookingData
+and CustomerData singletons including room selection, dates, nights, guest count,
+and customer contact details. Provides a button to start a new reservation which
+returns to the home page.
 """
 
 from PyQt5.QtWidgets import QWidget, QStackedWidget
@@ -12,11 +20,18 @@ from ui_components import UIFactory, HeaderComponent
 
 class ConfirmationPage:
     """Controls the final confirmation screen of the Hotel Eleon booking system.
-    Displays completed booking information and allows creation of a new reservation.
+    
+    This is the last View in the booking flow. It pulls data from both BookingData
+    and CustomerData singletons to display a complete reservation summary. The header
+    has no back button since this is the final step.
     """
 
     def __init__(self, parent: QWidget, stacked_widget: QStackedWidget):
         """Initializes the confirmation page controller.
+        
+        Sets up references to navigation and both data singletons, then builds
+        all UI elements for displaying the booking summary.
+        
         Parameters:
             parent (QWidget): Parent widget that hosts this page.
             stacked_widget (QStackedWidget): Navigation controller for page switching.
@@ -30,7 +45,13 @@ class ConfirmationPage:
 
     def _build_ui(self):
         """Constructs all UI components for the confirmation page,
-        including booking details and customer summary."""
+        including booking details and customer summary.
+        
+        Creates 8 labels to display: room title, check-in, check-out, guests,
+        nights, customer name, email, and phone. Also creates a button to start
+        a new reservation. Header is created without a back button since this
+        is the final page.
+        """
         
         HeaderComponent(self.parent, show_back=False)
 
@@ -104,7 +125,13 @@ class ConfirmationPage:
         self._setup_show_event()
 
     def _update_display(self):
-        """Updates all displayed labels with the most recent booking and customer data."""
+        """Updates all displayed labels with the most recent booking and customer data.
+        
+        Pulls data from BookingData and CustomerData singletons and updates all labels.
+        For customer name, it combines first and last name with string concatenation.
+        Uses Python's 'or' operator to provide fallback values when fields are empty.
+        This method is called automatically when the page is shown.
+        """
 
         # ROOM
         room = self.booking_data.selected_room
@@ -156,7 +183,12 @@ class ConfirmationPage:
 
     def _setup_show_event(self):
         """Overrides the parent's showEvent to refresh the confirmation display
-        each time the user navigates to this page."""
+        each time the user navigates to this page.
+        
+        This ensures the confirmation page always shows the most current data
+        when displayed. Saves the original showEvent and chains it after our
+        update logic to preserve any existing behavior.
+        """
         
         original_show = self.parent.showEvent
 
@@ -171,5 +203,10 @@ class ConfirmationPage:
         self.parent.showEvent = on_show
 
     def _make_new(self):
-        """Navigates back to the home page to start a brand new reservation."""
+        """Navigates back to the home page to start a brand new reservation.
+        
+        Changes the stacked widget index to 0 (home page). In a real application,
+        this would also call reset() on the data singletons to clear the old
+        booking information before starting fresh.
+        """
         self.stacked_widget.setCurrentIndex(0)

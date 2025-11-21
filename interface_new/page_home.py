@@ -2,8 +2,16 @@
 This file defines the HomePage class which acts as the starting screen of the
 Hotel Eleon booking system. It handles date selection, guest selection,
 and navigation to the availability results.
-Programmers: 
-date of code: November th, 2025
+
+Programmers: [Your Name], Mahi
+Date of code: November 1st, 2025
+
+Description:
+This is the landing page (index 0 in navigation) where users start their booking.
+It displays the hotel name and provides three main interactions: selecting check-in
+and check-out dates using a calendar, choosing number of guests with a counter,
+and a button to check availability. The date selection uses a smart algorithm that
+automatically swaps dates if the user picks them in the wrong order.
 """
 
 from PyQt5.QtWidgets import QWidget, QStackedWidget
@@ -14,11 +22,19 @@ from ui_components import UIFactory, HeaderComponent, GuestCounter
 
 class HomePage:
     """Controls the home screen of the Hotel Eleon booking interface.
-    Provides date selectors, guest counter, and the button to check availability.
+    
+    This is the first View in the booking flow. It uses components from UIFactory
+    and custom components (GuestCounter) to build the interface. All selections
+    are saved to the BookingData singleton so they're available on other pages.
     """
 
     def __init__(self, parent: QWidget, stacked_widget: QStackedWidget):
         """Initializes the home page controller.
+        
+        Sets up references to navigation and the BookingData singleton, then
+        builds all UI elements including hotel branding, date selector, guest
+        counter, and availability button.
+        
         Parameters:
             parent (QWidget): Parent widget hosting this page.
             stacked_widget (QStackedWidget): Navigation controller.
@@ -30,7 +46,13 @@ class HomePage:
     
     def _build_ui(self):
         """Constructs the UI components for the home page, including headers,
-        date pickers, guest selector, and navigation button."""
+        date pickers, guest selector, and navigation button.
+        
+        Creates the "HOTEL ELEON" branding labels, two date selection buttons that
+        share one calendar widget, a guest counter button with dropdown, and a
+        "Check Availability" button. The calendar and guest counter start hidden
+        and appear when their buttons are clicked.
+        """
         
         HeaderComponent(self.parent, show_back=False)
         
@@ -70,12 +92,28 @@ class HomePage:
         self._setup_show_event()
     
     def _toggle_calendar(self):
-        """Shows or hides the calendar widget when date buttons are clicked."""
+        """Shows or hides the calendar widget when date buttons are clicked.
+        
+        Uses the calendar's current visibility state to toggle between shown and hidden.
+        Both date buttons share the same calendar widget.
+        """
         self.calendar.setVisible(not self.calendar.isVisible())
     
     def _on_date_selected(self, date: QDate):
         """Handles selecting dates from the calendar.
-        Logic automatically swaps check-in/check-out if needed.
+        
+        This implements a smart date selection algorithm:
+        1. First click sets check-in date
+        2. Second click sets check-out date, BUT if the user picks an earlier date,
+           it automatically swaps them (first becomes check-out, second becomes check-in)
+        3. Third click starts over by setting a new check-in and clearing check-out
+        
+        This prevents users from creating invalid date ranges where check-out is
+        before check-in. We chose this algorithm over showing an error message
+        because it's more user-friendly and intuitive.
+        
+        Parameters:
+            date (QDate): The date clicked in the calendar widget
         """
         formatted_date = date.toString("yyyy-MM-dd")
         
@@ -103,15 +141,25 @@ class HomePage:
     
     def _on_guest_count_changed(self, count: int):
         """Updates the number of adult guests and refreshes the button label.
+        
+        This is a callback function passed to GuestCounter. It's called whenever
+        the user clicks the +/- buttons in the counter, implementing the Delegation
+        pattern where GuestCounter delegates the update action back to this page.
+        
         Parameters:
-            count (int): Selected number of guests.
+            count (int): Selected number of guests (1-8).
         """
         self.booking_data.adults = count
         self.guests_button.setText(f"Guests: {count}")
     
     def _check_availability(self):
         """Validates that both check-in and check-out are selected.
-        If valid, navigates to the room selection page."""
+        If valid, navigates to the room selection page.
+        
+        This is basic validation - if either date is missing, it flashes the
+        date buttons red to give visual feedback. If both dates are present,
+        it proceeds to the room selection page (index 1).
+        """
         
         if not self.booking_data.check_in or not self.booking_data.check_out:
             self._flash_red_buttons()
@@ -120,7 +168,12 @@ class HomePage:
         self.stacked_widget.setCurrentIndex(1)
     
     def _update_date_buttons(self):
-        """Updates the date button text with selected values from the model."""
+        """Updates the date button text with selected values from the model.
+        
+        Pulls the current dates from BookingData singleton and updates the button
+        labels to show the selected dates. If a date isn't selected yet, shows
+        placeholder text with extra spaces for consistent button width.
+        """
         
         if self.booking_data.check_in:
             checkin_text = f"Check In: {self.booking_data.check_in}"
@@ -137,7 +190,13 @@ class HomePage:
     
     def _flash_red_buttons(self):
         """Highlights date selection buttons in red temporarily
-        when the user attempts to proceed without selecting both dates."""
+        when the user attempts to proceed without selecting both dates.
+        
+        Provides visual feedback for validation. Changes button style to red,
+        then uses QTimer.singleShot to revert back to normal after 1 second
+        (1000 milliseconds). This gives users clear feedback without permanent
+        error messages cluttering the interface.
+        """
         
         red_style = "border: 3px solid #ff4444; background-color: #ffebeb;"
         self.checkin_button.setStyleSheet(red_style)
@@ -148,7 +207,12 @@ class HomePage:
     
     def _setup_show_event(self):
         """Overrides the parent's showEvent so that calendar and guest selector
-        reset visibility every time the home page is shown."""
+        reset visibility every time the home page is shown.
+        
+        This ensures a clean state when users navigate back to the home page -
+        any open dropdowns are hidden. Preserves the original showEvent if it
+        exists by chaining it after our logic.
+        """
         
         original_show_event = self.parent.showEvent
         

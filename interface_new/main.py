@@ -1,8 +1,15 @@
-"""HotelBookingApp.py
+"""main.py
 This file initializes and manages the main PyQt5 hotel booking application.
 It sets up the window, navigation system, and all page controllers.
-Programmers: 
-date of code: November 5th, 2025
+
+Programmers: Astghik, Mahi
+Date of code: November 5th, 2025
+
+Description:
+This is the entry point of the Hotel Eleon booking application. It creates the main
+window and uses QStackedWidget to manage navigation between four pages: home (index 0),
+room selection (index 1), checkout (index 2), and confirmation (index 3). Each page is
+created as a separate widget and stored in the stack for easy navigation.
 """
 
 import sys
@@ -16,12 +23,19 @@ from page_confirmation import ConfirmationPage
 
 class HotelBookingApp:
     """Main application controller for the Hotel Eleon booking system.
-    Responsible for initializing the Qt application, window, and all pages.
+    
+    This class manages the entire application lifecycle including window creation,
+    page initialization, and navigation setup. It creates a QStackedWidget to hold
+    all pages and allows switching between them by changing the current index.
     """
 
     def __init__(self):
         """Creates the QApplication instance and initializes the main window
-        along with all application pages."""
+        along with all application pages.
+        
+        This sets up the Qt application object needed for the GUI, then builds
+        the main window and all four pages of the booking flow.
+        """
   
         self.app = QApplication(sys.argv)
         # required Qt object that manages the whole UI system
@@ -34,7 +48,11 @@ class HotelBookingApp:
     
     def _setup_main_window(self):
         """Initializes the main application window and creates the stacked widget
-        used to display navigable pages."""
+        used to display navigable pages.
+        
+        Creates a 1920x1080 window and sets up QStackedWidget which acts as a
+        container for all pages, showing only one page at a time.
+        """
         
         self.main_window = QWidget()  # main application window.
         self.main_window.setWindowTitle("Hotel Eleon - Booking System")  # window bar
@@ -48,7 +66,16 @@ class HotelBookingApp:
     
     def _setup_pages(self):
         """Creates all application pages, initializes their controllers,
-        and inserts them into the navigation stack."""
+        and inserts them into the navigation stack.
+        
+        Each page is created as a QWidget and passed to its controller class.
+        The controllers build the UI automatically. Pages are added to the stack
+        at specific indices:
+        - Index 0: Home page (date and guest selection)
+        - Index 1: Room selection (with scroll area for multiple rooms)
+        - Index 2: Checkout (customer information form)
+        - Index 3: Confirmation (booking summary)
+        """
         
         # Create page container widget
         page_home = QWidget()
@@ -101,7 +128,11 @@ class HotelBookingApp:
     
     
     def run(self):
-        """Shows the main window and starts the Qt event loop."""
+        """Shows the main window and starts the Qt event loop.
+        
+        This makes the window visible to the user and starts the Qt event loop
+        which handles user interactions. The program exits when the window is closed.
+        """
         
         # Show the main window
         self.main_window.show()
@@ -112,7 +143,10 @@ class HotelBookingApp:
 
 def main():
     """Entry point of the application.
-    Creates the HotelBookingApp instance and runs it."""
+    
+    Creates the HotelBookingApp instance and runs it. This function is called
+    only when this file is executed directly (not imported as a module).
+    """
     
     app = HotelBookingApp()   # create the main application object
     app.run()                 # start the UI event loop

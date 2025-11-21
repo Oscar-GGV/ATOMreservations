@@ -1,8 +1,16 @@
 """page_checkout.py
 This file defines the CheckoutPage class responsible for collecting customer
 information, displaying booking details, and navigating to final confirmation.
-Programmers: 
-date of code: November th, 2025
+
+Programmers: [Your Name], Mahi
+Date of code: November 8th, 2025
+
+Description:
+This page (index 2 in navigation) displays the checkout form where users enter their
+personal and payment information. It shows a booking summary on the right side pulled
+from BookingData singleton and creates input fields on the left that update CustomerData
+as the user types. Uses UIFactory to create consistent form elements and HeaderComponent
+for navigation back to room selection.
 """
 
 from PyQt5.QtWidgets import QWidget, QStackedWidget
@@ -13,11 +21,19 @@ from ui_components import UIFactory, HeaderComponent
 
 class CheckoutPage:
     """Controls the checkout page of the Hotel Eleon booking system.
-    Builds customer form fields, displays booking summary, and manages navigation.
+    
+    This is the View layer for checkout. It builds the UI using components from
+    UIFactory and manages user input. As users type in the form fields, data is
+    automatically saved to the CustomerData singleton so it's available on the
+    confirmation page.
     """
 
     def __init__(self, parent: QWidget, stacked_widget: QStackedWidget):
         """Initializes the checkout page controller.
+        
+        Sets up references to the navigation system and both data singletons,
+        then builds all UI elements including the form and booking summary.
+        
         Parameters:
             parent (QWidget): Container widget for this page.
             stacked_widget (QStackedWidget): Navigation stack for page switching.
@@ -34,7 +50,11 @@ class CheckoutPage:
     
     def _build_ui(self):
         """Constructs all UI elements for the checkout page,
-        including header, booking summary labels, and form fields."""
+        including header, booking summary labels, and form fields.
+        
+        Creates a two-column layout: left side has the customer form with 9 input
+        fields, right side displays booking summary (room, dates, guests, nights).
+        """
         
         # Create header with back button
         HeaderComponent(
@@ -86,7 +106,18 @@ class CheckoutPage:
     
     def _create_customer_form(self):
         """Creates all labeled input fields for collecting customer information.
-        Each field is stored for access and updates the model as the user types."""
+        
+        Builds 9 form fields in a vertical layout: name, email, phone, address,
+        and payment info. Each field is connected to the CustomerData singleton
+        so data updates automatically as the user types. Uses a loop to avoid
+        repeating code for each field.
+        
+        Input fields created:
+            - First Name, Last Name (personal info)
+            - Email, Phone (contact info)
+            - Street, Zip Code (address)
+            - Card Number, Exp Date, CVV (payment)
+        """
         
         y = 300      # Starting Y position
         x = 200      # Left column X position
@@ -132,22 +163,39 @@ class CheckoutPage:
     
     def _on_field_changed(self, field_key: str, text: str):
         """Updates the CustomerData singleton whenever an input field changes.
+        
+        Uses Python's setattr() to dynamically update the correct attribute on
+        CustomerData based on the field_key. This is called every time the user
+        types a character in any input field.
+        
         Parameters:
-            field_key (str): Attribute name on the model.
+            field_key (str): Attribute name on the model (e.g., "first_name").
             text (str): New text entered by the user.
         """
         setattr(self.customer_data, field_key, text)
     
     def _go_back_to_rooms(self):
-        """Navigates to the room selection page."""
+        """Navigates to the room selection page.
+        
+        Changes the stacked widget index to 1 (room selection page).
+        """
         self.stacked_widget.setCurrentIndex(1)
     
     def _confirm_booking(self):
-        """Navigates to the final confirmation page."""
+        """Navigates to the final confirmation page.
+        
+        Changes the stacked widget index to 3 (confirmation page).
+        No validation is performed - all fields are optional for this demo.
+        """
         self.stacked_widget.setCurrentIndex(3)
         
     def _update_display(self):
-        """Refreshes all booking summary labels based on the BookingData model."""
+        """Refreshes all booking summary labels based on the BookingData model.
+        
+        Called automatically when the page is shown. Pulls data from the BookingData
+        singleton and updates all labels on the right side of the screen with current
+        booking information (room, dates, guests, nights).
+        """
         
         room = self.booking_data.selected_room
         
@@ -184,7 +232,16 @@ class CheckoutPage:
     
     def _flash_field_red(self, field):
         """Briefly highlights an invalid input field in red.
-        Provides visual feedback and reverts style after one second."""
+        
+        This function provides visual feedback when validation fails. It changes
+        the field's style to red, then uses QTimer to revert back to the original
+        style after 1 second (1000 milliseconds).
+        
+        Note: Currently not used, but kept for future validation features.
+        
+        Parameters:
+            field: The QLineEdit widget to highlight.
+        """
         
         original_style = field.styleSheet()
         
@@ -198,7 +255,11 @@ class CheckoutPage:
     
     def _setup_show_event(self):
         """Overrides the parent widget's showEvent to update the display whenever
-        the page becomes visible to the user."""
+        the page becomes visible to the user.
+        
+        This ensures that if the user goes back and changes dates or room selection,
+        the checkout page will show the updated information when they return.
+        """
         
         original_show_event = self.parent.showEvent
         
