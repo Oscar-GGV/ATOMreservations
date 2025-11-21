@@ -1,9 +1,22 @@
 """models.py
-This file contains core data models used across the Hotel Eleon booking system.
-Includes singleton classes for storing booking details and customer information,
-as well as room-related classes and an in-memory repository.
-Programmers: 
-date of code: November th, 2025
+This file contains all the data classes used throughout the booking system.
+It stores booking information, customer details, and room data.
+
+Programmers: Astghik, Mahi
+Date of code: October 28th, 2025
+
+Description:
+This file holds the data that gets shared between all pages. BookingData stores the
+dates, guests, and selected room. CustomerData stores the customer's personal info.
+Room is a simple class for room information, and RoomRepository holds all available
+rooms. These classes make sure all pages can access the same booking information
+without passing it around manually.
+
+Data stored:
+- BookingData: check_in, check_out, adults, selected_room
+- CustomerData: first_name, last_name, email, phone, street, zip_code, card_number, exp_date, cvv
+- Room: title, description
+- RoomRepository: list of all rooms
 """
 
 from datetime import datetime
@@ -11,20 +24,21 @@ from typing import Optional, Dict, List
 
 
 class BookingData:
-    """Singleton class that stores all temporary booking-related data during the
-    reservation flow. This includes dates, number of adults, and selected room."""
+    """Stores all booking information that gets shared across pages.
+    Only one copy of this exists in the whole application so all pages see the same data.
+    """
     
     _instance = None
     
     def __new__(cls):
-        """Ensures only one instance of BookingData is ever created."""
+        """Makes sure only one instance exists."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._initialized = False
         return cls._instance
     
     def __init__(self):
-        """Initializes booking data fields only once."""
+        """Sets up the booking fields with default values."""
         if self._initialized:
             return
         self._initialized = True
@@ -35,9 +49,13 @@ class BookingData:
         self.selected_room: Optional[Dict[str, str]] = None
     
     def calculate_nights(self) -> Optional[int]:
-        """Calculates the number of nights between check-in and check-out dates.
+        """Calculates how many nights between check-in and check-out.
+        
+        Takes the two date strings, converts them to date objects, and finds
+        the difference in days. Returns None if dates are missing or invalid.
+        
         Returns:
-            int or None: Number of nights, or None if dates are missing or invalid.
+            Number of nights, or None if can't calculate
         """
         if not self.check_in or not self.check_out:
             return None
@@ -50,7 +68,7 @@ class BookingData:
             return None
     
     def reset(self):
-        """Resets all booking fields to their initial default state."""
+        """Clears all booking data back to defaults."""
         self.check_in = None
         self.check_out = None
         self.adults = 1
@@ -59,19 +77,21 @@ class BookingData:
 
 
 class CustomerData:
-    """Singleton class storing customer information used during checkout."""
+    """Stores customer information entered during checkout.
+    Only one copy exists so checkout and confirmation pages see the same data.
+    """
     
     _instance = None
     
     def __new__(cls):
-        """Ensures a single shared instance of CustomerData."""
+        """Makes sure only one instance exists."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._initialized = False
         return cls._instance
     
     def __init__(self):
-        """Initializes customer details only once."""
+        """Sets up all customer fields as empty strings."""
         if self._initialized:
             return
         self._initialized = True
@@ -91,28 +111,33 @@ class CustomerData:
 
 
 class Room:
-    """Represents a hotel room with a title and descriptive features."""
+    """Simple class that holds information about one room."""
     
     def __init__(self, title: str, description: str):
-        """Creates a Room object.
+        """Creates a room with a name and features.
+        
         Parameters:
-            title (str): Room name.
-            description (str): Comma-separated room features.
+            title: Room name like "Ocean View Suite"
+            description: Features separated by commas
         """
         self.title = title
         self.description = description
     
     def get_description_lines(self) -> List[str]:
-        """Splits the comma-separated description into a clean list of features.
+        """Splits the description into separate lines for display.
+        
         Returns:
-            list of str: Individual description parts.
+            List of individual features
         """
         return [part.strip() for part in self.description.split(',')]
 
 
 
 class RoomRepository:
-    """Simple in-memory repository containing all room definitions."""
+    """Holds all the rooms available in the hotel.
+    This is where all room data is stored in the application.
+    This is temperaraly was made to do testing, the actual data with more infromaton was done by backend
+    """
     
     _rooms: List[Room] = [
         Room("Ocean View Suite", "2 Queen Beds, Ocean View, Breakfast Included, Sleeps 4"),
@@ -124,5 +149,9 @@ class RoomRepository:
     
     @classmethod
     def get_all_rooms(cls) -> List[Room]:
-        """Returns a list of all predefined Room objects."""
+        """Returns the list of all available rooms.
+        
+        Returns:
+            List of all 5 rooms
+        """
         return cls._rooms

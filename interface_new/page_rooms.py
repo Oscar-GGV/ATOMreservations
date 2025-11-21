@@ -1,8 +1,15 @@
 """page_rooms.py
-This file defines the RoomSelectionPage class which displays all available rooms
-as selectable cards, shows booking summary information, and navigates to checkout.
-Programmers: 
-date of code: November th, 2025
+This file creates the room selection page where users can see and pick rooms.
+It shows available rooms as cards and displays the booking summary.
+
+Programmers: Astghik, Mahi
+Date of code: November 8th, 2025
+
+Description:
+This page (index 1) appears after user checks availability. It shows booking info
+at the top (dates, guests, nights) and displays all available rooms in a grid below.
+Room data comes from RoomRepository. Each room is shown as a card with a select button.
+When user picks a room, it saves to BookingData and goes to checkout page.
 """
 
 from PyQt5.QtWidgets import QWidget, QStackedWidget
@@ -11,65 +18,69 @@ from ui_components import UIFactory, HeaderComponent, RoomCard
 
 
 class RoomSelectionPage:
-    """Controls the room selection screen of the Hotel Eleon booking system.
-    Displays booking summary (dates, guests, nights) and all available room cards.
+    """Builds and controls the room selection page.
+    Shows booking summary and creates room cards from repository data.
     """
 
     def __init__(self, parent: QWidget, stacked_widget: QStackedWidget):
-        """Initializes the room selection controller.
+        """Sets up the room selection page.
+        
         Parameters:
-            parent (QWidget): Container widget for this page.
-            stacked_widget (QStackedWidget): Page navigation controller.
+            parent: Widget container for this page
+            stacked_widget: Navigation controller to switch pages
         """
         self.parent = parent
         self.stacked_widget = stacked_widget
-        self.booking_data = BookingData()  # Model (Singleton)
+        self.booking_data = BookingData()
         
-        # Build the UI
         self._build_ui()
     
 
     def _build_ui(self):
-        """Constructs all UI elements, including header, summary labels,
-        and the grid of room cards."""
+        """Creates all UI elements on this page.
         
-        # Create header with back button
+        Builds header with back button, summary labels on the left showing dates
+        and guests, and room cards in a grid layout.
+        """
+        
+        # Header with back button
         HeaderComponent(
             self.parent, 
             show_back=True, 
             back_callback=self._go_back_to_home
         )
 
-        # Check-in date label
+        # Booking summary labels
         self.checkin_label = UIFactory.create_label(
             "Check In: (not selected)", 50, 200, self.parent
         )
         
-        # Check-out date label
         self.checkout_label = UIFactory.create_label(
             "Check Out: (not selected)", 50, 230, self.parent
         )
         
-        # Number of guests label
         self.guests_label = UIFactory.create_label(
             "Guests: (not selected)", 50, 260, self.parent
         )
         
-        # Number of nights label (calculated later)
         self.nights_label = UIFactory.create_label(
             "Nights: (not calculated)", 50, 290, self.parent
         )
 
-        # Create grid of room cards (3 per row)
+        # Create grid of room cards
         self._create_room_grid()
 
-        # Setup show event to update summary when page loads
+        # Update labels when page shows
         self._setup_show_event()
 
     
     def _create_room_grid(self):
-        """Builds the grid of RoomCard widgets based on the repository.
-        Automatically arranges them in rows and adjusts page height."""
+        """Creates room cards arranged in a grid, 3 per row.
+        
+        Gets all rooms from repository and places them in rows. Uses a loop
+        to position each card, moving to next row after every 3 cards.
+        Also calculates how tall the page needs to be for all rooms.
+        """
         
         rooms = RoomRepository.get_all_rooms()
 
@@ -78,35 +89,38 @@ class RoomSelectionPage:
         spacing = 20
         max_per_row = 3
         
-        # Starting position
+        # Starting position for first card
         x_start = 500
         y_start = 300
         x = x_start
         y = y_start
         
         for idx, room in enumerate(rooms):
-            # Create room card at current position
+            # Create card at current position
             RoomCard(x, y, self.parent, room, self._on_room_selected)
             
-            # Calculate next position
+            # Figure out next position
             if (idx + 1) % max_per_row == 0:
+                # Move to next row
                 x = x_start
                 y += room_height + spacing
             else:
+                # Move to next column
                 x += room_width + spacing
         
-        # Calculate minimum height needed for full grid
+        # Calculate total height needed for all rooms
         needed_rows = (len(rooms) + max_per_row - 1) // max_per_row
         total_height = y_start + needed_rows * (room_height + spacing) + 100
         self.parent.setMinimumHeight(total_height)
     
     
     def _on_room_selected(self, title: str, description: str):
-        """Handles selection of a room card.
-        Saves selection to the BookingData model, then navigates to checkout.
+        """Called when user clicks select on a room card.
+        Saves the room choice and goes to checkout page.
+        
         Parameters:
-            title (str): Selected room title.
-            description (str): Selected room description.
+            title: Name of selected room
+            description: Room features
         """
         
         self.booking_data.selected_room = {
@@ -114,17 +128,18 @@ class RoomSelectionPage:
             "description": description
         }
         
-        # Navigate to checkout page
+        # Go to checkout
         self.stacked_widget.setCurrentIndex(2)
     
     def _go_back_to_home(self):
-        """Navigates back to the home page."""
+        """Goes back to home page when back button clicked."""
         self.stacked_widget.setCurrentIndex(0)
     
     
     def _update_summary_labels(self):
-        """Updates summary labels (check-in, check-out, guests, nights)
-        using data from the BookingData model."""
+        """Updates all the summary labels with current booking info.
+        Gets data from BookingData and displays it.
+        """
         
         if self.booking_data.check_in:
             checkin_text = f"Check In: {self.booking_data.check_in}"
@@ -141,7 +156,7 @@ class RoomSelectionPage:
         guests_text = f"Guests: {self.booking_data.adults}"
         self.guests_label.setText(guests_text)
         
-        # Calculate nights from model
+        # Calculate and show nights
         nights = self.booking_data.calculate_nights()
         
         if nights is not None:
@@ -153,21 +168,19 @@ class RoomSelectionPage:
     
  
     def _setup_show_event(self):
-        """Overrides the parent widget’s showEvent so that summary labels
-        refresh every time the room selection page is shown."""
+        """Makes labels update automatically when page is shown.
+        This keeps the summary current if user goes back and changes dates.
+        """
         
         original_show_event = self.parent.showEvent
         
         def on_show_event(event):
-            """Update summary when page is shown."""
             self._update_summary_labels()
             
-            # Call original show event if it exists
             if original_show_event:
                 try:
                     original_show_event(event)
                 except:
                     pass
         
-        # Attach show event handler
         self.parent.showEvent = on_show_event
