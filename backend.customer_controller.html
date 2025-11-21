@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module backend.customer_controller</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="backend.html" class="white">backend</a>.customer_controller</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:/Users/oscar/ATOMreservations/ATOMreservations/backend/customer_controller.py">/Users/oscar/ATOMreservations/ATOMreservations/backend/customer_controller.py</a></td></tr></table>
+    <p><span class="code">customer-controller.py<br>
+This&nbsp;file&nbsp;contains&nbsp;the&nbsp;<a href="#CustomerController">CustomerController</a>&nbsp;class&nbsp;which&nbsp;manages&nbsp;customer&nbsp;operations&nbsp;in&nbsp;the&nbsp;hotel&nbsp;reservation&nbsp;system.<br>
+Programmer:&nbsp;Oscar&nbsp;Guevara<br>
+date&nbsp;of&nbsp;code:&nbsp;october&nbsp;19th,&nbsp;2025<br>
+modifications:&nbsp;added&nbsp;email&nbsp;validation&nbsp;function&nbsp;October&nbsp;22,&nbsp;2025</span></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="re.html">re</a><br>
+</td><td class="multicolumn"></td><td class="multicolumn"></td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="backend.customer_controller.html#CustomerController">CustomerController</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="CustomerController">class <strong>CustomerController</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">Manages&nbsp;customer&nbsp;operations&nbsp;in&nbsp;the&nbsp;hotel&nbsp;reservation&nbsp;system.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="CustomerController-__init__"><strong>__init__</strong></a>(self)</dt><dd><span class="code">Initializes&nbsp;the&nbsp;<a href="#CustomerController">CustomerController</a>&nbsp;with&nbsp;an&nbsp;empty&nbsp;customer&nbsp;list.</span></dd></dl>
+
+<dl><dt><a name="CustomerController-add_customer"><strong>add_customer</strong></a>(self, first_name, last_name, email, phone, address)</dt><dd><span class="code">Adds&nbsp;a&nbsp;new&nbsp;customer&nbsp;to&nbsp;the&nbsp;system.<br>
+parameters:<br>
+first_name&nbsp;(str):&nbsp;The&nbsp;first&nbsp;name&nbsp;of&nbsp;the&nbsp;customer.<br>
+last_name&nbsp;(str):&nbsp;The&nbsp;last&nbsp;name&nbsp;of&nbsp;the&nbsp;customer.<br>
+email&nbsp;(str):&nbsp;The&nbsp;email&nbsp;address&nbsp;of&nbsp;the&nbsp;customer.<br>
+phone&nbsp;(str):&nbsp;The&nbsp;phone&nbsp;number&nbsp;of&nbsp;the&nbsp;customer.<br>
+address&nbsp;(Address):&nbsp;The&nbsp;address&nbsp;<a href="builtins.html#object">object</a>&nbsp;of&nbsp;the&nbsp;customer.<br>
+&nbsp;<br>
+returns:<br>
+bool:&nbsp;True&nbsp;if&nbsp;the&nbsp;customer&nbsp;was&nbsp;added&nbsp;successfully,&nbsp;False&nbsp;if&nbsp;a&nbsp;customer&nbsp;with&nbsp;the&nbsp;same&nbsp;email</span></dd></dl>
+
+<dl><dt><a name="CustomerController-find_customer_by_email"><strong>find_customer_by_email</strong></a>(self, email)</dt><dd><span class="code">Finds&nbsp;a&nbsp;customer&nbsp;by&nbsp;their&nbsp;email&nbsp;address.<br>
+parameters:<br>
+email&nbsp;(str):&nbsp;The&nbsp;email&nbsp;address&nbsp;of&nbsp;the&nbsp;customer&nbsp;to&nbsp;find.<br>
+returns:<br>
+Customer:&nbsp;The&nbsp;customer&nbsp;<a href="builtins.html#object">object</a>&nbsp;if&nbsp;found,&nbsp;None&nbsp;otherwise.</span></dd></dl>
+
+<dl><dt><a name="CustomerController-is_valid_email"><strong>is_valid_email</strong></a>(self, email)</dt><dd><span class="code">Validates&nbsp;the&nbsp;format&nbsp;of&nbsp;an&nbsp;email&nbsp;address.<br>
+parameters:<br>
+email&nbsp;(str):&nbsp;The&nbsp;email&nbsp;address&nbsp;to&nbsp;validate.<br>
+uses&nbsp;regular&nbsp;expressions&nbsp;to&nbsp;check&nbsp;for&nbsp;a&nbsp;valid&nbsp;email&nbsp;format.<br>
+returns:<br>
+bool:&nbsp;True&nbsp;if&nbsp;the&nbsp;email&nbsp;format&nbsp;is&nbsp;valid,&nbsp;False&nbsp;otherwise.</span></dd></dl>
+
+<dl><dt><a name="CustomerController-remove_customer"><strong>remove_customer</strong></a>(self, email)</dt><dd><span class="code">Removes&nbsp;a&nbsp;customer&nbsp;from&nbsp;the&nbsp;system.<br>
+parameters:<br>
+email&nbsp;(str):&nbsp;The&nbsp;email&nbsp;address&nbsp;of&nbsp;the&nbsp;customer&nbsp;to&nbsp;remove.<br>
+returns:<br>
+bool:&nbsp;True&nbsp;if&nbsp;the&nbsp;customer&nbsp;was&nbsp;removed&nbsp;successfully,&nbsp;False&nbsp;if&nbsp;the&nbsp;customer&nbsp;was&nbsp;not&nbsp;found.</span></dd></dl>
+
+<dl><dt><a name="CustomerController-update_customer"><strong>update_customer</strong></a>(self, email, new_info)</dt><dd><span class="code">Updates&nbsp;a&nbsp;customer's&nbsp;information.<br>
+parameters:<br>
+email&nbsp;(str):&nbsp;The&nbsp;email&nbsp;address&nbsp;of&nbsp;the&nbsp;customer&nbsp;to&nbsp;update.<br>
+new_info&nbsp;(dict):&nbsp;A&nbsp;dictionary&nbsp;containing&nbsp;the&nbsp;new&nbsp;customer&nbsp;information.<br>
+returns:<br>
+bool:&nbsp;True&nbsp;if&nbsp;the&nbsp;customer&nbsp;was&nbsp;updated&nbsp;successfully,&nbsp;False&nbsp;if&nbsp;the&nbsp;customer&nbsp;was&nbsp;not&nbsp;found.</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>
