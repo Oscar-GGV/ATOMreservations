@@ -2,7 +2,7 @@
 This file defines the CheckoutPage class responsible for collecting customer
 information, displaying booking details, and navigating to final confirmation.
 
-Programmers: [Your Name], Mahi
+Programmers: Astghik, Mahi
 Date of code: November 8th, 2025
 
 Description:

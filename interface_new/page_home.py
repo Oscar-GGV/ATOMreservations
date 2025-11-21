@@ -3,7 +3,7 @@ This file defines the HomePage class which acts as the starting screen of the
 Hotel Eleon booking system. It handles date selection, guest selection,
 and navigation to the availability results.
 
-Programmers: [Your Name], Mahi
+Programmers: Astghik, Mahi
 Date of code: November 1st, 2025
 
 Description:
