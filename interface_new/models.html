@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module models</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title">models</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Castgh%5Conedrive%5Cdesktop%5Cnew%20folder%5Cinterface_new%5Cmodels.py">c:\users\astgh\onedrive\desktop\new folder\interface_new\models.py</a></td></tr></table>
+    <p><span class="code">models.py<br>
+This&nbsp;file&nbsp;contains&nbsp;all&nbsp;the&nbsp;data&nbsp;classes&nbsp;used&nbsp;throughout&nbsp;the&nbsp;booking&nbsp;system.<br>
+It&nbsp;stores&nbsp;booking&nbsp;information,&nbsp;customer&nbsp;details,&nbsp;and&nbsp;room&nbsp;data.<br>
+&nbsp;<br>
+Programmers:&nbsp;Astghik,&nbsp;Mahi<br>
+Date&nbsp;of&nbsp;code:&nbsp;October&nbsp;28th,&nbsp;2025<br>
+&nbsp;<br>
+Description:<br>
+This&nbsp;file&nbsp;holds&nbsp;the&nbsp;data&nbsp;that&nbsp;gets&nbsp;shared&nbsp;between&nbsp;all&nbsp;pages.&nbsp;<a href="#BookingData">BookingData</a>&nbsp;stores&nbsp;the<br>
+dates,&nbsp;guests,&nbsp;and&nbsp;selected&nbsp;room.&nbsp;<a href="#CustomerData">CustomerData</a>&nbsp;stores&nbsp;the&nbsp;customer's&nbsp;personal&nbsp;info.<br>
+<a href="#Room">Room</a>&nbsp;is&nbsp;a&nbsp;simple&nbsp;class&nbsp;for&nbsp;room&nbsp;information,&nbsp;and&nbsp;<a href="#RoomRepository">RoomRepository</a>&nbsp;holds&nbsp;all&nbsp;available<br>
+rooms.&nbsp;These&nbsp;classes&nbsp;make&nbsp;sure&nbsp;all&nbsp;pages&nbsp;can&nbsp;access&nbsp;the&nbsp;same&nbsp;booking&nbsp;information<br>
+without&nbsp;passing&nbsp;it&nbsp;around&nbsp;manually.<br>
+&nbsp;<br>
+Data&nbsp;stored:<br>
+-&nbsp;<a href="#BookingData">BookingData</a>:&nbsp;check_in,&nbsp;check_out,&nbsp;adults,&nbsp;selected_room<br>
+-&nbsp;<a href="#CustomerData">CustomerData</a>:&nbsp;first_name,&nbsp;last_name,&nbsp;email,&nbsp;phone,&nbsp;street,&nbsp;zip_code,&nbsp;card_number,&nbsp;exp_date,&nbsp;cvv<br>
+-&nbsp;<a href="#Room">Room</a>:&nbsp;title,&nbsp;description<br>
+-&nbsp;<a href="#RoomRepository">RoomRepository</a>:&nbsp;list&nbsp;of&nbsp;all&nbsp;rooms</span></p>
+<p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="models.html#BookingData">BookingData</a>
+</dt><dt class="heading-text"><a href="models.html#CustomerData">CustomerData</a>
+</dt><dt class="heading-text"><a href="models.html#Room">Room</a>
+</dt><dt class="heading-text"><a href="models.html#RoomRepository">RoomRepository</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="BookingData">class <strong>BookingData</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">Stores&nbsp;all&nbsp;booking&nbsp;information&nbsp;that&nbsp;gets&nbsp;shared&nbsp;across&nbsp;pages.<br>
+Only&nbsp;one&nbsp;copy&nbsp;of&nbsp;this&nbsp;exists&nbsp;in&nbsp;the&nbsp;whole&nbsp;application&nbsp;so&nbsp;all&nbsp;pages&nbsp;see&nbsp;the&nbsp;same&nbsp;data.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="BookingData-__init__"><strong>__init__</strong></a>(self)</dt><dd><span class="code">Sets&nbsp;up&nbsp;the&nbsp;booking&nbsp;fields&nbsp;with&nbsp;default&nbsp;values.</span></dd></dl>
+
+<dl><dt><a name="BookingData-calculate_nights"><strong>calculate_nights</strong></a>(self) -&gt; Optional[int]</dt><dd><span class="code">Calculates&nbsp;how&nbsp;many&nbsp;nights&nbsp;between&nbsp;check-in&nbsp;and&nbsp;check-out.<br>
+&nbsp;<br>
+Takes&nbsp;the&nbsp;two&nbsp;date&nbsp;strings,&nbsp;converts&nbsp;them&nbsp;to&nbsp;date&nbsp;objects,&nbsp;and&nbsp;finds<br>
+the&nbsp;difference&nbsp;in&nbsp;days.&nbsp;Returns&nbsp;None&nbsp;if&nbsp;dates&nbsp;are&nbsp;missing&nbsp;or&nbsp;invalid.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Number&nbsp;of&nbsp;nights,&nbsp;or&nbsp;None&nbsp;if&nbsp;can't&nbsp;calculate</span></dd></dl>
+
+<dl><dt><a name="BookingData-reset"><strong>reset</strong></a>(self)</dt><dd><span class="code">Clears&nbsp;all&nbsp;booking&nbsp;data&nbsp;back&nbsp;to&nbsp;defaults.</span></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="BookingData-__new__"><strong>__new__</strong></a>(cls)</dt><dd><span class="code">Makes&nbsp;sure&nbsp;only&nbsp;one&nbsp;instance&nbsp;exists.</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="CustomerData">class <strong>CustomerData</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">Stores&nbsp;customer&nbsp;information&nbsp;entered&nbsp;during&nbsp;checkout.<br>
+Only&nbsp;one&nbsp;copy&nbsp;exists&nbsp;so&nbsp;checkout&nbsp;and&nbsp;confirmation&nbsp;pages&nbsp;see&nbsp;the&nbsp;same&nbsp;data.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="CustomerData-__init__"><strong>__init__</strong></a>(self)</dt><dd><span class="code">Sets&nbsp;up&nbsp;all&nbsp;customer&nbsp;fields&nbsp;as&nbsp;empty&nbsp;strings.</span></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="CustomerData-__new__"><strong>__new__</strong></a>(cls)</dt><dd><span class="code">Makes&nbsp;sure&nbsp;only&nbsp;one&nbsp;instance&nbsp;exists.</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="Room">class <strong>Room</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#Room">Room</a>(title:&nbsp;str,&nbsp;description:&nbsp;str)<br>
+&nbsp;<br>
+Simple&nbsp;class&nbsp;that&nbsp;holds&nbsp;information&nbsp;about&nbsp;one&nbsp;room.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="Room-__init__"><strong>__init__</strong></a>(self, title: str, description: str)</dt><dd><span class="code">Creates&nbsp;a&nbsp;room&nbsp;with&nbsp;a&nbsp;name&nbsp;and&nbsp;features.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;title:&nbsp;<a href="#Room">Room</a>&nbsp;name&nbsp;like&nbsp;"Ocean&nbsp;View&nbsp;Suite"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;description:&nbsp;Features&nbsp;separated&nbsp;by&nbsp;commas</span></dd></dl>
+
+<dl><dt><a name="Room-get_description_lines"><strong>get_description_lines</strong></a>(self) -&gt; List[str]</dt><dd><span class="code">Splits&nbsp;the&nbsp;description&nbsp;into&nbsp;separate&nbsp;lines&nbsp;for&nbsp;display.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;List&nbsp;of&nbsp;individual&nbsp;features</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="RoomRepository">class <strong>RoomRepository</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">Holds&nbsp;all&nbsp;the&nbsp;rooms&nbsp;available&nbsp;in&nbsp;the&nbsp;hotel.<br>
+This&nbsp;is&nbsp;where&nbsp;all&nbsp;room&nbsp;data&nbsp;is&nbsp;stored&nbsp;in&nbsp;the&nbsp;application.<br>
+This&nbsp;is&nbsp;temperaraly&nbsp;was&nbsp;made&nbsp;to&nbsp;do&nbsp;testing,&nbsp;the&nbsp;actual&nbsp;data&nbsp;with&nbsp;more&nbsp;infromaton&nbsp;was&nbsp;done&nbsp;by&nbsp;backend<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Class methods defined here:<br>
+<dl><dt><a name="RoomRepository-get_all_rooms"><strong>get_all_rooms</strong></a>() -&gt; List[models.Room]</dt><dd><span class="code">Returns&nbsp;the&nbsp;list&nbsp;of&nbsp;all&nbsp;available&nbsp;rooms.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;List&nbsp;of&nbsp;all&nbsp;5&nbsp;rooms</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__annotations__</strong> = {'_rooms': typing.List[models.Room]}</dl>
+
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>Dict</strong> = typing.Dict<br>
+<strong>List</strong> = typing.List<br>
+<strong>Optional</strong> = typing.Optional</td></tr></table>
+</body></html>
