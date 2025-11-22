@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module backend.manager_report</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="backend.html" class="white">backend</a>.manager_report</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:/Users/oscar/ATOMreservations/ATOMreservations/backend/manager_report.py">/Users/oscar/ATOMreservations/ATOMreservations/backend/manager_report.py</a></td></tr></table>
+    <p><span class="code">manager_report.py</span></p>
+<p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-calculate_nights"><strong>calculate_nights</strong></a>(check_in, check_out)</dt><dd><span class="code">Calculate&nbsp;the&nbsp;number&nbsp;of&nbsp;nights&nbsp;between&nbsp;check-in&nbsp;and&nbsp;check-out&nbsp;dates.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;check_in&nbsp;:&nbsp;tuple<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;tuple&nbsp;(month,&nbsp;day)&nbsp;represented&nbsp;the&nbsp;check-in&nbsp;date.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;check_out&nbsp;:&nbsp;tuple<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;tuple&nbsp;(month,&nbsp;day)&nbsp;represented&nbsp;the&nbsp;check-out&nbsp;date.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;number&nbsp;of&nbsp;nights&nbsp;between&nbsp;the&nbsp;two&nbsp;dates.</span></dd></dl>
+ <dl><dt><a name="-count_booked_rooms"><strong>count_booked_rooms</strong></a>(month, day, room_type, calendar_head)</dt><dd><span class="code">Count&nbsp;the&nbsp;number&nbsp;of&nbsp;booked&nbsp;rooms&nbsp;for&nbsp;a&nbsp;specific&nbsp;room&nbsp;type&nbsp;on&nbsp;a&nbsp;given&nbsp;date.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;month&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;month&nbsp;number&nbsp;(1-12).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;day&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;day&nbsp;number&nbsp;(1-30).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;room_type&nbsp;:&nbsp;dict<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;room&nbsp;type&nbsp;dictionary&nbsp;containing&nbsp;at&nbsp;least&nbsp;the&nbsp;"name"&nbsp;key.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;calendar_head&nbsp;:&nbsp;MonthNode<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;head&nbsp;of&nbsp;the&nbsp;linked&nbsp;list&nbsp;representing&nbsp;the&nbsp;calendar.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;quantity&nbsp;of&nbsp;the&nbsp;specified&nbsp;room&nbsp;type&nbsp;booked&nbsp;on&nbsp;the&nbsp;given&nbsp;date.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;0&nbsp;if&nbsp;the&nbsp;month,&nbsp;day,&nbsp;or&nbsp;room&nbsp;type&nbsp;is&nbsp;not&nbsp;found.</span></dd></dl>
+ <dl><dt><a name="-generate_full_report"><strong>generate_full_report</strong></a>(month, year)</dt><dd><span class="code">Generate&nbsp;a&nbsp;full&nbsp;report&nbsp;including&nbsp;occupancy,&nbsp;total&nbsp;reservations,&nbsp;total&nbsp;customers,&nbsp;total&nbsp;revenue,&nbsp;and&nbsp;reservation&nbsp;summary.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;month&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;month&nbsp;number&nbsp;(1-12).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;year&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;year&nbsp;(not&nbsp;used&nbsp;in&nbsp;current&nbsp;implementation&nbsp;but&nbsp;can&nbsp;be&nbsp;useful&nbsp;for&nbsp;future&nbsp;extensions).<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dict<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;dictionary&nbsp;containing&nbsp;all&nbsp;report&nbsp;components.</span></dd></dl>
+ <dl><dt><a name="-generate_occupancy_report"><strong>generate_occupancy_report</strong></a>(month, year)</dt><dd><span class="code">Generate&nbsp;occupancy&nbsp;report&nbsp;for&nbsp;each&nbsp;room&nbsp;type&nbsp;for&nbsp;the&nbsp;given&nbsp;month&nbsp;and&nbsp;year.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;month&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;month&nbsp;number&nbsp;(1-12).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;year&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;year&nbsp;(not&nbsp;used&nbsp;in&nbsp;current&nbsp;implementation&nbsp;but&nbsp;can&nbsp;be&nbsp;useful&nbsp;for&nbsp;future&nbsp;extensions).<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dict<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;dictionary&nbsp;with&nbsp;room&nbsp;types&nbsp;as&nbsp;keys&nbsp;and&nbsp;a&nbsp;list&nbsp;of&nbsp;daily&nbsp;occupancy&nbsp;data&nbsp;as&nbsp;values.</span></dd></dl>
+ <dl><dt><a name="-get_reservation_summary"><strong>get_reservation_summary</strong></a>()</dt><dd><span class="code">Get&nbsp;a&nbsp;summary&nbsp;of&nbsp;all&nbsp;reservations.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;list&nbsp;of&nbsp;dictionaries&nbsp;containing&nbsp;reservation&nbsp;details.</span></dd></dl>
+ <dl><dt><a name="-get_total_customers"><strong>get_total_customers</strong></a>()</dt><dd><span class="code">Get&nbsp;the&nbsp;total&nbsp;number&nbsp;of&nbsp;customers.</span></dd></dl>
+ <dl><dt><a name="-get_total_reservations"><strong>get_total_reservations</strong></a>()</dt><dd><span class="code">Get&nbsp;the&nbsp;total&nbsp;number&nbsp;of&nbsp;reservations.</span></dd></dl>
+ <dl><dt><a name="-get_total_revenue"><strong>get_total_revenue</strong></a>()</dt><dd><span class="code">Calculate&nbsp;the&nbsp;total&nbsp;revenue&nbsp;from&nbsp;all&nbsp;reservations.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;total&nbsp;revenue&nbsp;generated&nbsp;from&nbsp;all&nbsp;reservations.</span></dd></dl>
+</td></tr></table>
+</body></html>

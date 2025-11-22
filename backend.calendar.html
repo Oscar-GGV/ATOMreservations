@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module backend.calendar</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="backend.html" class="white">backend</a>.calendar</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:/Users/oscar/ATOMreservations/ATOMreservations/backend/calendar.py">/Users/oscar/ATOMreservations/ATOMreservations/backend/calendar.py</a></td></tr></table>
+    <p><span class="code">#&nbsp;calendar.py</span></p>
+<p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="backend.calendar.html#DayNode">DayNode</a>
+</dt><dt class="heading-text"><a href="backend.calendar.html#MonthNode">MonthNode</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="DayNode">class <strong>DayNode</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#DayNode">DayNode</a>(day_number)<br>
+&nbsp;<br>
+Node&nbsp;representing&nbsp;a&nbsp;day&nbsp;in&nbsp;the&nbsp;linked&nbsp;list.<br>
+Attributes<br>
+----------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;day_number&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;numerical&nbsp;day&nbsp;of&nbsp;the&nbsp;month&nbsp;(e.g.,&nbsp;1-30).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bookings&nbsp;:&nbsp;list&nbsp;of&nbsp;tuples<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each&nbsp;tuple&nbsp;contains&nbsp;(room_type,&nbsp;guantity)&nbsp;booked&nbsp;for&nbsp;that&nbsp;day.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;next_day&nbsp;:&nbsp;<a href="#DayNode">DayNode</a>&nbsp;or&nbsp;None<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pointer&nbsp;to&nbsp;the&nbsp;next&nbsp;day&nbsp;node&nbsp;in&nbsp;the&nbsp;linked&nbsp;list.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="DayNode-__init__"><strong>__init__</strong></a>(self, day_number)</dt><dd><span class="code">Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="MonthNode">class <strong>MonthNode</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#MonthNode">MonthNode</a>(month_number)<br>
+&nbsp;<br>
+Node&nbsp;representing&nbsp;a&nbsp;month&nbsp;in&nbsp;the&nbsp;linked&nbsp;list.<br>
+Attributes<br>
+----------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;month_number&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;numerical&nbsp;month&nbsp;(e.g.,&nbsp;1–12).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;day_list_head&nbsp;:&nbsp;<a href="#DayNode">DayNode</a>&nbsp;or&nbsp;None<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pointer&nbsp;to&nbsp;the&nbsp;head&nbsp;of&nbsp;the&nbsp;linked&nbsp;list&nbsp;of&nbsp;days&nbsp;for&nbsp;this&nbsp;month.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;next_month&nbsp;:&nbsp;<a href="#MonthNode">MonthNode</a>&nbsp;or&nbsp;None<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pointer&nbsp;to&nbsp;the&nbsp;next&nbsp;month&nbsp;node&nbsp;in&nbsp;the&nbsp;linked&nbsp;list.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="MonthNode-__init__"><strong>__init__</strong></a>(self, month_number)</dt><dd><span class="code">Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-store_booking_range"><strong>store_booking_range</strong></a>(
+    start_month,
+    start_day,
+    end_month,
+    end_day,
+    room_type,
+    calendar_head
+)</dt><dd><span class="code">Store&nbsp;a&nbsp;booking&nbsp;for&nbsp;a&nbsp;specific&nbsp;room&nbsp;type&nbsp;over&nbsp;a&nbsp;date&nbsp;range&nbsp;in&nbsp;the&nbsp;calendar&nbsp;linked&nbsp;list.<br>
+Parameters<br>
+----------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;start_month&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;starting&nbsp;month&nbsp;number&nbsp;(1-12).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;start_day&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;starting&nbsp;day&nbsp;number&nbsp;(1-30).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;end_month&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;ending&nbsp;month&nbsp;number&nbsp;(1-12).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;end_day&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;ending&nbsp;day&nbsp;number&nbsp;(1-30).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;room_type&nbsp;:&nbsp;dict<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;room&nbsp;type&nbsp;dictionary&nbsp;containing&nbsp;at&nbsp;leas&nbsp;the&nbsp;"name"&nbsp;key.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;calendar_head&nbsp;:&nbsp;<a href="#MonthNode">MonthNode</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;head&nbsp;of&nbsp;the&nbsp;linked&nbsp;list&nbsp;representing&nbsp;the&nbsp;calendar.<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#MonthNode">MonthNode</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;updated&nbsp;head&nbsp;of&nbsp;the&nbsp;calendar&nbsp;linked&nbsp;list.</span></dd></dl>
+</td></tr></table>
+</body></html>

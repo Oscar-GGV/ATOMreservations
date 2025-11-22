@@ -1,7 +1,7 @@
 """manager_report.py"""
 from backend.customer_controller import CustomerController
-from backend.reservation_system import reservations_db, calendar_head
-from backend.database import room_database
+from backend.reservation_system import ReservationSystem
+from backend.database import Hotel
 from backend.calendar import MonthNode, DayNode
 
 def generate_occupancy_report(month, year):
