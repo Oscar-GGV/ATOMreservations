@@ -1,5 +1,4 @@
-# manager_report.py
-
+"""manager_report.py"""
 from backend.customer_controller import CustomerController
 from backend.reservation_system import reservations_db, calendar_head
 from backend.database import room_database
