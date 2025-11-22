@@ -3,8 +3,6 @@
 This file contains the Search class which represents a search query in the hotel reservation system.
 Programmer: Oscar Guevara
 date of code: November 5th, 2025"""
-from backend.address import dayNode
-from backend.address import monthNode
 class Search:
     """Represents a search query in the hotel reservation system."""
     def __init__(self, check_in_date, check_out_date, room_type, guests):

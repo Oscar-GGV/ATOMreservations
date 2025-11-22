@@ -3,9 +3,9 @@ This file contains the ReservationSystem class which manages reservations in the
 Programmers: Mike and Oscar
 date of code: November 5th, 2025
 adjusted November 10th, 2025"""
-from database import Hotel
-from calendar import get_booked_quantity, store_booking_range
-from customer import Customer
+from backend.database import Hotel
+from backend.calendar import store_booking_range
+from backend.customer import Customer
 
 reservation_counter = 1
 calendar_head = None

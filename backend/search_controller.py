@@ -2,8 +2,8 @@
 This file contains the SearchController class which manages search operations in the hotel reservation system.
 Programmer: Oscar Guevara
 date of code: November 5th, 2025"""
-from reservation_system import ReservationSystem
-from search import Search
+from backend.reservation_system import ReservationSystem
+from backend.search import Search
 class SearchController:
     """Controller for handling search operations in the reservation system."""
     def __init__(self):

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module backend.reservation_system</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="backend.html" class="white">backend</a>.reservation_system</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:/Users/oscar/ATOMreservations/ATOMreservations/backend/reservation_system.py">/Users/oscar/ATOMreservations/ATOMreservations/backend/reservation_system.py</a></td></tr></table>
+    <p><span class="code">Reservation_system.py<br>
+This&nbsp;file&nbsp;contains&nbsp;the&nbsp;<a href="#ReservationSystem">ReservationSystem</a>&nbsp;class&nbsp;which&nbsp;manages&nbsp;reservations&nbsp;in&nbsp;the&nbsp;hotel&nbsp;reservation&nbsp;system.<br>
+Programmers:&nbsp;Mike&nbsp;and&nbsp;Oscar<br>
+date&nbsp;of&nbsp;code:&nbsp;November&nbsp;5th,&nbsp;2025<br>
+adjusted&nbsp;November&nbsp;10th,&nbsp;2025</span></p>
+<p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="backend.reservation_system.html#ReservationSystem">ReservationSystem</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="ReservationSystem">class <strong>ReservationSystem</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">Manages&nbsp;reservations&nbsp;and&nbsp;room&nbsp;availability&nbsp;in&nbsp;the&nbsp;hotel&nbsp;reservation&nbsp;system.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="ReservationSystem-__init__"><strong>__init__</strong></a>(self)</dt><dd><span class="code">Initializes&nbsp;the&nbsp;<a href="#ReservationSystem">ReservationSystem</a>&nbsp;with&nbsp;a&nbsp;Hotel&nbsp;instance&nbsp;and&nbsp;reservation&nbsp;database.</span></dd></dl>
+
+<dl><dt><a name="ReservationSystem-check_availability"><strong>check_availability</strong></a>(self, room_type, check_in, check_out)</dt><dd><span class="code">Checks&nbsp;if&nbsp;a&nbsp;room&nbsp;type&nbsp;is&nbsp;available&nbsp;for&nbsp;the&nbsp;given&nbsp;date&nbsp;range.<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;room_type&nbsp;(str):&nbsp;The&nbsp;type&nbsp;of&nbsp;room&nbsp;to&nbsp;check&nbsp;availability&nbsp;for.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;check_in&nbsp;(tuple):&nbsp;The&nbsp;check-in&nbsp;date&nbsp;as&nbsp;(month,&nbsp;day).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;check_out&nbsp;(tuple):&nbsp;The&nbsp;check-out&nbsp;date&nbsp;as&nbsp;(month,&nbsp;day).<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bool:&nbsp;True&nbsp;if&nbsp;the&nbsp;room&nbsp;type&nbsp;is&nbsp;available,&nbsp;False&nbsp;otherwise.</span></dd></dl>
+
+<dl><dt><a name="ReservationSystem-generate_reservation_id"><strong>generate_reservation_id</strong></a>(self)</dt><dd><span class="code">Generates&nbsp;a&nbsp;unique&nbsp;reservation&nbsp;ID.</span></dd></dl>
+
+<dl><dt><a name="ReservationSystem-get_available_room_types"><strong>get_available_room_types</strong></a>(self, check_in, check_out, num_guests)</dt><dd><span class="code">Gets&nbsp;a&nbsp;list&nbsp;of&nbsp;available&nbsp;room&nbsp;types&nbsp;for&nbsp;the&nbsp;given&nbsp;date&nbsp;range&nbsp;and&nbsp;number&nbsp;of&nbsp;guests.<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;check_in&nbsp;(tuple):&nbsp;The&nbsp;check-in&nbsp;date&nbsp;as&nbsp;(month,&nbsp;day).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;check_out&nbsp;(tuple):&nbsp;The&nbsp;check-out&nbsp;date&nbsp;as&nbsp;(month,&nbsp;day).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;num_guests&nbsp;(int):&nbsp;The&nbsp;number&nbsp;of&nbsp;guests.<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;list:&nbsp;A&nbsp;list&nbsp;of&nbsp;available&nbsp;room&nbsp;types&nbsp;that&nbsp;can&nbsp;accommodate&nbsp;the&nbsp;number&nbsp;of&nbsp;guests.</span></dd></dl>
+
+<dl><dt><a name="ReservationSystem-make_reservation"><strong>make_reservation</strong></a>(self, customer, room_type, check_in, check_out)</dt><dd><span class="code">Makes&nbsp;a&nbsp;reservation&nbsp;for&nbsp;a&nbsp;customer&nbsp;if&nbsp;the&nbsp;room&nbsp;type&nbsp;is&nbsp;available.<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;customer&nbsp;(Customer):&nbsp;The&nbsp;customer&nbsp;making&nbsp;the&nbsp;reservation.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;room_type&nbsp;(str):&nbsp;The&nbsp;type&nbsp;of&nbsp;room&nbsp;to&nbsp;reserve.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;check_in&nbsp;(tuple):&nbsp;The&nbsp;check-in&nbsp;date&nbsp;as&nbsp;(month,&nbsp;day).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;check_out&nbsp;(tuple):&nbsp;The&nbsp;check-out&nbsp;date&nbsp;as&nbsp;(month,&nbsp;day).<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str&nbsp;or&nbsp;None:&nbsp;The&nbsp;reservation&nbsp;ID&nbsp;if&nbsp;successful,&nbsp;None&nbsp;if&nbsp;the&nbsp;room&nbsp;type&nbsp;is&nbsp;not&nbsp;available.</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>calendar_head</strong> = None<br>
+<strong>reservation_counter</strong> = 1</td></tr></table>
+</body></html>
