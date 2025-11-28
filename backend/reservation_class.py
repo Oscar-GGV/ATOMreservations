@@ -1,21 +1,44 @@
-#Reservation Class.py
+"""reservation.py
+Represents a reservation in the hotel reservation system.
+Programmer: Oscar Guevara
+"""
 
 class Reservation:
     """
-    Represents a reservation made by a customer.
+    Represents a reservation.
     Attributes:
-    - room_type: Type of room reserved
-    - check_in: Check-in date
-    - check_out: Check-out date
+        reservation_id (str): Unique ID for the reservation.
+        customer_email (str): Email of the customer who made the reservation.
+        room_type (str): Type of room reserved.
+        check_in (str): Check-in date (YYYY-MM-DD).
+        check_out (str): Check-out date (YYYY-MM-DD).
     """
-    def __init__(self, room_type, check_in, check_out):
-        """
-        Initializes a Reservation instance.
-        Args:
-        - room_type: Type of room reserved
-        - check_in: Check-in date
-        - check_out: Check-out date
-        """
+
+    def __init__(self, reservation_id, customer_email, room_type, check_in, check_out):
+        self.reservation_id = reservation_id
+        self.customer_email = customer_email
         self.room_type = room_type
         self.check_in = check_in
         self.check_out = check_out
+
+    #Convert to CSV row
+    def to_dict(self):
+        return {
+            "reservation_id": self.reservation_id,
+            "customer_email": self.customer_email,
+            "room_type": self.room_type,
+            "check_in": self.check_in,
+            "check_out": self.check_out,
+        }
+
+    #Create Reservation object From a csv ROw
+    @staticmethod
+    def from_dict(data):
+        return Reservation(
+            data["reservation_id"],
+            data["customer_email"],
+            data["room_type"],
+            data["check_in"],
+            data["check_out"],
+        )
+
