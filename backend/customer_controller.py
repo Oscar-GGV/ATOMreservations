@@ -2,18 +2,21 @@
 This file contains the CustomerController class which manages customer operations in the hotel reservation system.
 Programmer: Oscar Guevara
 date of code: october 19th, 2025
-modifications: added email validation function October 22, 2025
+modifications: novemeber 27th, 2025
 """
+import csv
 from backend.address import Address
 from backend.customer import Customer
 import re #used for email validation
 
 class CustomerController:
     """Manages customer operations in the hotel reservation system."""
-    def __init__(self):
+    def __init__(self, csv_file="customers.csv"):
         """Initializes the CustomerController with an empty customer list."""
         self.customers = []
-        #Func below creates customer and adds customer to list of Customers that will later be connected to either text file or excel
+        self.csv_file = csv_file
+        self.load_customers_from_csv(self.csv_file)
+
     def add_customer(self, first_name, last_name, email, phone, address):
         """Adds a new customer to the system.
             parameters:
@@ -22,29 +25,34 @@ class CustomerController:
             email (str): The email address of the customer.
             phone (str): The phone number of the customer.
             address (Address): The address object of the customer.
-
             returns:
-            bool: True if the customer was added successfully, False if a customer with the same email
-        """
-        check_if_already_exists = self.find_customer_by_email(email)
-        if check_if_already_exists:
-            return False #Customer with email already exists in the system.
-        customer = Customer(first_name, last_name, email, phone, address)
-        self.customers.append(customer) #the customer is being appended to the customers list
-        return True #Customer successfully added
+            bool: True if the customer was added successfully, False if a customer with the same email already exists."""
+        exists = self.find_customer_by_email(email)
+        if exists:
+            return False #cant add customer if they already exist
+
+        customer = Customer(first_name, last_name, email, phone, address) #creates customer object
+        self.customers.append(customer) #adds customer instance to customers list
+
     
-    def find_customer_by_email(self, email): #email is customer email
+        self.save_customers_to_csv(self.csv_file, customer) #saves customer to csv file
+
+        return True
+
+
+    
+    def find_customer_by_email(self, email): 
         """Finds a customer by their email address.
             parameters:
             email (str): The email address of the customer to find.
             returns:
             Customer: The customer object if found, None otherwise."""
-        for customer in self.customers: # iterates through the list self.customers
-            if customer.email == email: # checks for email given in the parameter, if found V
-                return customer # returns the object of the customer
-        return None #otherwise return None because customer wasn't found
+        for customer in self.customers: # iterates through list
+            if customer.email == email: # checks for email given
+                return customer # returns customer object
+        return None #customer wasn't found
     
-    def update_customer(self, email, new_info): #parameters are the object, email and the new info
+    def update_customer(self, email, new_info): 
         """Updates a customer's information.
             parameters:
             email (str): The email address of the customer to update.
@@ -52,16 +60,16 @@ class CustomerController:
             returns:
             bool: True if the customer was updated successfully, False if the customer was not found."""
         customer = self.find_customer_by_email(email) 
-        if customer: #if the customer is found should be True V
+        if customer: #true if customer was found
             customer.first_name = new_info.get("first_name", customer.first_name)
             customer.last_name = new_info.get("last_name", customer.last_name)
-            customer.phone = new_info.get("phone", customer.phone) #customer.phone is equal to the new phone number
-            customer.email = new_info.get("email", customer.email) #customer.email is now equal to the new email
+            customer.phone = new_info.get("phone", customer.phone) 
+            customer.email = new_info.get("email", customer.email) 
             customer.address = new_info.get("address", customer.address)
             return True #after return True
         return False #customer not found return false/// maybe can add a new function later to deal with the fact that customer does not have an account
     
-    def remove_customer(self, email): #remove_customer function parameters are the customer
+    def remove_customer(self, email): 
         """Removes a customer from the system.
             parameters:
             email (str): The email address of the customer to remove.
@@ -83,9 +91,92 @@ class CustomerController:
         pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         return re.match(pattern, email.strip()) is not None
     
+    def load_customers_from_csv(self, file_path):
+        """Loads customers from a CSV file.
+            parameters:
+            file_path (str): The path to the CSV file.
+            returns:
+            None"""
+        try:
+            with open(file_path, mode='r', newline='') as file:
+                reader = csv.DictReader(file)
+                for row in reader:
+                    address = Address(
+                        row['street'],
+                        row['city'],
+                        row['state'],
+                        row['zipcode'],
+                        row['country']
+                    )
+                    customer = Customer(
+                        row['first_name'],
+                        row['last_name'],
+                        row['email'],
+                        row['phone'],
+                        address
+                    )
+
+                    self.customers.append(customer)
+        except FileNotFoundError:
+            pass
+    def save_customers_to_csv(self, file_path, customer):
+        """appends a new customer to the CSV file."""
+        file_exists = False
+        try:
+            with open(file_path, mode = 'r'):
+                file_exists = True
+        except FileNotFoundError:
+            pass
+        with open (file_path, mode = 'a', newline = '') as file:
+            fieldnames = ['first_name', 'last_name', 'email', 'phone', 'street', 'city', 'state', 'zipcode', 'country']
+            writer = csv.DictWriter(file, fieldnames = fieldnames)
+
+            if not file_exists:
+                writer.writeheader()
+
+            writer.writerow({
+                'first_name': customer.first_name,
+                'last_name': customer.last_name,
+                'email': customer.email,
+                'phone': customer.phone,
+                'street': customer.address.street,
+                'city': customer.address.city,
+                'state': customer.address.state,
+                'zipcode': customer.address.zipcode,
+                'country': customer.address.country
+            })
+    def save_all_customers_to_csv(self, file_path):
+        """rewrties the whole csv file with current customer."""
+        with open(file_path, mode = 'w', newline = '') as file:
+            fieldnames = ["first_name", "last_name", "email", "phone", "street", "city", "state", "zipcode", "country"]
+            writer = csv.DictWriter(file, fieldnames = fieldnames)
+            writer.writeheader()
+
+            for customer in self.customers:
+                writer.writerow({
+                    "first_name": customer.first_name,
+                    "last_name": customer.last_name,
+                    "email": customer.email,
+                    "phone": customer.phone,
+                    "street": customer.address.street,
+                    "city": customer.address.city,
+                    "state": customer.address.state,
+                    "zipcode": customer.address.zipcode,
+                    "country": customer.address.country
+                })
+                ##important to note that when a conection to the front end is made, dict cannot be used directly, need to extract the values and send them as parameters to create the customer object.
+
+
+                
         
-    #Might add a get total customers for the manager report later on, MUST connect to something filewise, either excel or plain text
-#hello this is a new change
+
+
+
+
+    
+    
+        
+
 
 
 
