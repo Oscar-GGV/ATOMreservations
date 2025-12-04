@@ -58,7 +58,7 @@ class CustomerController:
             customer.address = new_info.get("address", customer.address)
             return True #after return True
         return False #customer not found return false/// maybe can add a new function later to deal with the fact that customer does not have an account
-    
+#end of update_customer method
     def remove_customer(self, email): 
         """Removes a customer from the system.
             parameters: email (str)
@@ -73,7 +73,7 @@ class CustomerController:
     def is_valid_email(self, email):
         """Validates the format of an email address.
             parameters:
-            email (str): The email address to validate.
+            email (str): 
             uses regular expressions to check for a valid email format.
             returns:
             bool: True if the email format is valid, False otherwise."""
@@ -106,9 +106,9 @@ class CustomerController:
                     )
 
                     self.customers.append(customer)
-        except FileNotFoundError:
+        except FileNotFoundError: #jusr in case the file does not exist or something else unexpected happens
             pass
-    def save_customers_to_csv(self, file_path, customer):
+    def save_customers_to_csv(self, file_path, customer): #IMPORTANT*** this only writes ONE customer
         """appends a new customer to the CSV file."""
         file_exists = False
         try:
@@ -134,7 +134,8 @@ class CustomerController:
                 'zipcode': customer.address.zipcode,
                 'country': customer.address.country
             })
-    def save_all_customers_to_csv(self, file_path):
+
+    def save_all_customers_to_csv(self, file_path): #THIS OVERWRITES THE WHOLE CSV FILE
         """rewrties the whole csv file with current customer."""
         with open(file_path, mode = 'w', newline = '') as file:
             fieldnames = ["first_name", "last_name", "email", "phone", "street", "city", "state", "zipcode", "country"]
