@@ -7,7 +7,7 @@ class DayNode:
         day_number : int
             The numerical day of the month (e.g., 1-30).
         bookings : list of tuples
-            Each tuple contains (room_type, guantity) booked for that day.
+            Each tuple contains (room_type, quantity) booked for that day.
         next_day : DayNode or None
             Pointer to the next day node in the linked list.
     """
@@ -15,7 +15,6 @@ class DayNode:
         self.day_number = day_number
         self.bookings = []  # list of tuples (room_type, quantity)
         self.next_day = None
-
 
 class MonthNode:
     """
@@ -108,3 +107,4 @@ def store_booking_range(start_month, start_day, end_month, end_day, room_type, c
             day, month = 1, month + 1
 
     return calendar_head
+

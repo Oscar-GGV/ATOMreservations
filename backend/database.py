@@ -1,7 +1,6 @@
 """database.py
 This file contains the Room and Hotel classes used to store the rooms,
 room types, and other information about the hotel.
-
 Programmer: Taksh Joshi
 date of code: October 6th, 2025
 modifications: Added a Room class and a Hotel class to store the rooms and their information
