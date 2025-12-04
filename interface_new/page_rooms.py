@@ -4,12 +4,13 @@ It shows available rooms as cards and displays the booking summary.
 
 Programmers: Astghik, Mahi
 Date of code: November 8th, 2025
+Modified: December 3rd, 2025 - Updated to go to login page
 
 Description:
 This page (index 1) appears after user checks availability. It shows booking info
 at the top (dates, guests, nights) and displays all available rooms in a grid below.
 Room data comes from RoomRepository. Each room is shown as a card with a select button.
-When user picks a room, it saves to BookingData and goes to checkout page.
+When user picks a room, it saves to BookingData and goes to login page.
 """
 
 from PyQt5.QtWidgets import QWidget, QStackedWidget
@@ -116,7 +117,7 @@ class RoomSelectionPage:
     
     def _on_room_selected(self, title: str, description: str):
         """Called when user clicks select on a room card.
-        Saves the room choice and goes to checkout page.
+        Saves the room choice and goes to login page.
         
         Parameters:
             title: Name of selected room
@@ -128,7 +129,7 @@ class RoomSelectionPage:
             "description": description
         }
         
-        # Go to checkout
+        # Go to login page
         self.stacked_widget.setCurrentIndex(2)
     
     def _go_back_to_home(self):

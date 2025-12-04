@@ -4,12 +4,13 @@ It creates the main window and sets up navigation between different pages.
 
 Programmers: Astghik, Mahi
 Date of code: November 5th, 2025
+Modified: December 3rd, 2025 - Added login page and auto-fill integration
 
 Description:
-This file builds the main application window and creates all four pages of the booking
+This file builds the main application window and creates all pages of the booking
 system. It uses a QStackedWidget to store these pages and lets users move between them
-by changing which page index is active. The pages are: home (0), rooms (1), checkout (2),
-and confirmation (3). Each page is built in its own file and gets added here.
+by changing which page index is active. The pages are: home (0), rooms (1), login (2),
+checkout (3), confirmation (4), and register (5).
 """
 
 import sys
@@ -17,8 +18,10 @@ from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QScrollArea
 from PyQt5.QtCore import Qt
 from page_home import HomePage
 from page_rooms import RoomSelectionPage
+from page_login import LoginPage
 from page_checkout import CheckoutPage
 from page_confirmation import ConfirmationPage
+from page_register import RegisterPage
 
 
 class HotelBookingApp:
@@ -50,10 +53,10 @@ class HotelBookingApp:
     
     
     def _setup_pages(self):
-        """Creates all four pages and adds them to the navigation stack.
+        """Creates all pages and adds them to the navigation stack.
         
         Each page gets its own container widget and index number:
-        0 = Home, 1 = Rooms, 2 = Checkout, 3 = Confirmation
+        0 = Home, 1 = Rooms, 2 = Login, 3 = Checkout, 4 = Confirmation, 5 = Register
         """
         
         # Home page (index 0)
@@ -72,15 +75,25 @@ class HotelBookingApp:
         scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.stacked_widget.addWidget(scroll_area)
     
-        # Checkout page (index 2)
+        # Login page (index 2)
+        page_login = QWidget()
+        self.login_page = LoginPage(page_login, self.stacked_widget)
+        self.stacked_widget.addWidget(page_login)
+        
+        # Checkout page (index 3) - Pass login_page reference for auto-fill
         page_checkout = QWidget()
-        CheckoutPage(page_checkout, self.stacked_widget)
+        CheckoutPage(page_checkout, self.stacked_widget, self.login_page)
         self.stacked_widget.addWidget(page_checkout)
         
-        # Confirmation page (index 3)
+        # Confirmation page (index 4)
         page_confirmation = QWidget()
         ConfirmationPage(page_confirmation, self.stacked_widget)
         self.stacked_widget.addWidget(page_confirmation)
+        
+        # Registration page (index 5)
+        page_register = QWidget()
+        RegisterPage(page_register, self.stacked_widget)
+        self.stacked_widget.addWidget(page_register)
 
         # Start on home page
         self.stacked_widget.setCurrentIndex(0)

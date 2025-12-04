@@ -4,6 +4,7 @@ It lets them pick check-in/check-out dates, number of guests, and check availabi
 
 Programmers: Astghik, Mahi
 Date of code: November 1st, 2025
+Updated: December 2025 - Added shared BookingData support
 
 Description:
 This is the first page (index 0) users see. It shows the hotel name and has three
@@ -11,6 +12,9 @@ main things: date picker buttons that share one calendar, a guest counter, and a
 check availability button. When users pick dates, it automatically swaps them if
 they pick check-out before check-in. All selections get saved to BookingData so
 other pages can use them.
+
+IMPORTANT: Now accepts a shared BookingData instance to ensure data persists
+across all pages and through the "Make New Reservation" flow.
 """
 
 from PyQt5.QtWidgets import QWidget, QStackedWidget
@@ -24,16 +28,21 @@ class HomePage:
     Uses UIFactory and custom components to create the UI.
     """
 
-    def __init__(self, parent: QWidget, stacked_widget: QStackedWidget):
+    def __init__(self, parent: QWidget, stacked_widget: QStackedWidget, 
+                 booking_data=None):
         """Sets up the home page.
         
         Parameters:
             parent: Widget container for this page
             stacked_widget: Navigation controller to switch between pages
+            booking_data: Shared BookingData instance (optional, creates new if None)
         """
         self.parent = parent
         self.stacked_widget = stacked_widget
-        self.booking_data = BookingData()
+        
+        # Use shared instance if provided, otherwise create new one
+        self.booking_data = booking_data if booking_data else BookingData()
+        
         self._build_ui()
     
     def _build_ui(self):
@@ -173,14 +182,20 @@ class HomePage:
     
     def _setup_show_event(self):
         """Makes sure calendar and guest counter hide when page is shown.
-        This keeps things clean when user comes back to this page.
+        Also updates the date buttons to reflect current BookingData state.
         """
         
         original_show_event = self.parent.showEvent
         
         def on_show_event(event):
+            # Hide popups
             self.calendar.hide()
             self.guest_counter.hide()
+            
+            # Update UI to reflect current booking data
+            self._update_date_buttons()
+            self.guests_button.setText(f"Guests: {self.booking_data.adults}")
+            
             if original_show_event:
                 try:
                     original_show_event(event)
