@@ -12,6 +12,7 @@ import re #used for email validation
 class CustomerController:
     """Manages customer operations in the hotel reservation system."""
     def __init__(self, csv_file="customers.csv"):
+        #file should default to customers.csv if it isnt added in main.py
         """Initializes the CustomerController with an empty customer list."""
         self.customers = []
         self.csv_file = csv_file
@@ -19,39 +20,32 @@ class CustomerController:
 
     def add_customer(self, first_name, last_name, email, phone, address):
         """Adds a new customer to the system.
-            parameters:
-            first_name (str): The first name of the customer.
-            last_name (str): The last name of the customer.
-            email (str): The email address of the customer.
-            phone (str): The phone number of the customer.
-            address (Address): The address object of the customer.
-            returns:
-            bool: True if the customer was added successfully, False if a customer with the same email already exists."""
-        exists = self.find_customer_by_email(email)
+            parameters:first_name (str): The first name of the customer.last_name (str): The last name of the customer.email (str): The email address of the customer.phone (str): The phone number of the customer.address (Address): The address object of the customer.
+            returns: bool: True if the customer was added successfully, False if a customer with the same email already exists."""
+        exists = self.find_customer_by_email(email) #exists is either the customer object or none which works as true or fakse
         if exists:
             return False #cant add customer if they already exist
-
+#else
         customer = Customer(first_name, last_name, email, phone, address) #creates customer object
-        self.customers.append(customer) #adds customer instance to customers list
+        self.customers.append(customer) #adds customer obj to customers list
 
     
         self.save_customers_to_csv(self.csv_file, customer) #saves customer to csv file
 
         return True
-
+#end of the add costomr method
 
     
     def find_customer_by_email(self, email): 
         """Finds a customer by their email address.
-            parameters:
-            email (str): The email address of the customer to find.
-            returns:
-            Customer: The customer object if found, None otherwise."""
+            parameters: email (str): The email address of the customer to find.
+            returns: Customer: The customer object if found, None otherwise."""
         for customer in self.customers: # iterates through list
             if customer.email == email: # checks for email given
                 return customer # returns customer object
-        return None #customer wasn't found
-    
+        return None #customer wasn't found, none should work as false here
+#end of find cusromer by email method
+
     def update_customer(self, email, new_info): 
         """Updates a customer's information.
             parameters:
@@ -59,8 +53,8 @@ class CustomerController:
             new_info (dict): A dictionary containing the new customer information.
             returns:
             bool: True if the customer was updated successfully, False if the customer was not found."""
-        customer = self.find_customer_by_email(email) 
-        if customer: #true if customer was found
+        customer = self.find_customer_by_email(email) #either gets customer object or none
+        if customer: #true
             customer.first_name = new_info.get("first_name", customer.first_name)
             customer.last_name = new_info.get("last_name", customer.last_name)
             customer.phone = new_info.get("phone", customer.phone) 
@@ -75,9 +69,10 @@ class CustomerController:
             email (str): The email address of the customer to remove.
             returns:
             bool: True if the customer was removed successfully, False if the customer was not found."""
-        customer = self.find_customer_by_email(email) #finds the customer object by calling on the find customer func
-        if customer: #should be true if customer was found V
+        customer = self.find_customer_by_email(email) #customer object by calling on the find customer func
+        if customer: #true
             self.customers.remove(customer) #removes from the list
+            self.save_all_customers_to_csv(self.csv_file) #added december 3rd, this shhould update the csv file after removing customer.
             return True #return true because the remove was successful 
         return False #return false because customer does not exist in system /// could be updated later to connect to a customer not found func.
     
@@ -91,7 +86,7 @@ class CustomerController:
         pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         return re.match(pattern, email.strip()) is not None
     
-    def load_customers_from_csv(self, file_path):
+    def load_customers_from_csv(self, file_path): #function used at the beginning to load a customer into the customers list.
         """Loads customers from a CSV file.
             parameters:
             file_path (str): The path to the CSV file.
@@ -116,7 +111,9 @@ class CustomerController:
                         address
                     )
 
-                    self.customers.append(customer)
+                    self.customers.append(customer) #IMPORTANT!!! part that actually adds customer to customers.
+                    print("loading customer from", file_path) #THIS IS FOR TESTING this is to check if the loading works.
+                print("loaded", len(self.customers), "customers") #THSI IS FOR TESTING same thing as the top line only just after the loop to see how many customers were loaded.
         except FileNotFoundError:
             pass
     def save_customers_to_csv(self, file_path, customer):
@@ -145,6 +142,7 @@ class CustomerController:
                 'zipcode': customer.address.zipcode,
                 'country': customer.address.country
             })
+
     def save_all_customers_to_csv(self, file_path):
         """rewrties the whole csv file with current customer."""
         with open(file_path, mode = 'w', newline = '') as file:

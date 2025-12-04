@@ -22,7 +22,7 @@ class Customer:
         self.email = email
         self.phone = phone
         self.address = address
-        #Here the instance of address is being imported from address.py
+        #address is an object of the Address class imported from address.py
         Customer.add_to_customercount()
         #here the code uses the class method add_to_customercount in order to save the number of "Customer" objects created by the init
     @classmethod
