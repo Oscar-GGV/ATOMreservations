@@ -108,3 +108,31 @@ def store_booking_range(start_month, start_day, end_month, end_day, room_type, c
 
     return calendar_head
 
+def get_booked_quantity(month, day, room_type, calendar_head):
+    """
+    gets the number of rooms available for the parameters give"""
+    current_month = calendar_head
+    while current_month and current_month.month_number != month:
+        current_month = current_month.next_month
+    if not current_month:
+        return 0 #month is not found/no bookings
+    #traverse day list
+    current_day = current_month.day_list_head
+    while current_day and current_day.day_number != day:
+        current_day = current_day.next_day
+    
+    if not current_day:
+        return 0 #day not found
+    #search bookings list
+    room_name = room_type
+    for rtype, qty in current_day.bookings:
+        if rtype == room_name:
+            return qty
+    return 0#room type not found
+    
+    
+
+
+    
+    
+
