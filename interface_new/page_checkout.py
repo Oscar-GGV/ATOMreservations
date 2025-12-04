@@ -1,21 +1,12 @@
-"""page_checkout.py
-This file creates the checkout page where users enter their personal information.
-It shows a booking summary and collects customer details through a form.
-
-Programmers: Astghik, Mahi
-Date of code: November 8th, 2025
-Modified: December 3rd, 2025 - Reorganized layout with overlapping sections
-
-Description:
-This page (index 3) displays the checkout form with Personal Information on left,
-Billing Address in the middle overlapping, Payment at bottom, and booking summary
-on the right side.
-"""
-
 from PyQt5.QtWidgets import QWidget, QStackedWidget
 from PyQt5.QtCore import QTimer
 from models import BookingData, CustomerData
 from ui_components import UIFactory, HeaderComponent
+from backend.customer_controller import CustomerController
+from backend.reservation_controller import ReservationController
+from backend.reservation_system import ReservationSystem
+from backend.address import Address
+from backend.customer import Customer
 
 
 class CheckoutPage:
@@ -27,16 +18,26 @@ class CheckoutPage:
         self.customer_data = CustomerData()
         self.input_fields = {}
         self.login_page = login_page
+        
+        # Backend controllers
+        self.customer_controller = CustomerController()
+        self.reservation_system = ReservationSystem()
+        self.reservation_controller = ReservationController(
+            self.customer_controller, 
+            self.reservation_system
+        )
+        
         self._build_ui()
     
     def _build_ui(self):
+        # Header with back button
         HeaderComponent(
             self.parent, 
             show_back=True, 
             back_callback=self._go_back_to_login
         )
         
-        # Right side - booking summary (stays same as original)
+        # Right side - booking summary
         self.room_info_label = UIFactory.create_label(
             "(room details here)", 1600, 300, self.parent, 
             "font-size: 18px;"
@@ -58,18 +59,20 @@ class CheckoutPage:
             "Nights: (not calculated)", 1600, 420, self.parent
         )
         
+        # Create form sections
         self._create_customer_form()
         
-        # Confirm button at original position
+        # Confirm button
         self.confirm_button = UIFactory.create_button(
             "Confirm Booking", 
             1600, 900, 
             280, 60, 
-            self.parent
+            self.parent,
+            "background-color: black; color: white; font-size: 18px;"
         )
         self.confirm_button.clicked.connect(self._confirm_booking)
         
-        # Set minimum height for scrolling
+        # Set page height for scrolling
         self.parent.setMinimumHeight(1200)
         
         self._setup_show_event()
@@ -79,11 +82,11 @@ class CheckoutPage:
         input_height = 40
         spacing = 60
         
-        # LEFT SIDE - Section 1: Personal Information
+        # Personal Information - Left side
         x_left = 156
         y_left = 250
         
-        section_header = UIFactory.create_label(
+        UIFactory.create_label(
             "Personal Information", x_left, y_left, self.parent,
             "font-size: 18px; font-weight: bold; color: black;"
         )
@@ -102,26 +105,21 @@ class CheckoutPage:
             label.setStyleSheet("font-weight: bold; font-size: 10pt;")
             
             field = UIFactory.create_input_field(
-                x_left + 200,
-                y_left, 
-                input_width, 
-                input_height, 
-                self.parent
+                x_left + 200, y_left, input_width, input_height, self.parent
             )
             
             self.input_fields[field_key] = field
-            
             field.textChanged.connect(
                 lambda text, key=field_key: self._on_field_changed(key, text)
             )
             
             y_left += spacing
         
-        # MIDDLE - Section 3: Billing Address (overlapping with Personal Info)
+        # Billing Address - Middle
         x_middle = 800
         y_middle = 250
         
-        section_header = UIFactory.create_label(
+        UIFactory.create_label(
             "Billing Address", x_middle, y_middle, self.parent,
             "font-size: 18px; font-weight: bold; color: black;"
         )
@@ -140,26 +138,21 @@ class CheckoutPage:
             label.setStyleSheet("font-weight: bold; font-size: 10pt;")
             
             field = UIFactory.create_input_field(
-                x_middle + 200,
-                y_middle, 
-                input_width, 
-                input_height, 
-                self.parent
+                x_middle + 200, y_middle, input_width, input_height, self.parent
             )
             
             self.input_fields[field_key] = field
-            
             field.textChanged.connect(
                 lambda text, key=field_key: self._on_field_changed(key, text)
             )
             
             y_middle += spacing
         
-        # BOTTOM LEFT - Section 2: Payment
-        y_bottom = max(y_left, y_middle) + 40  # Start after both columns
+        # Payment - Bottom left
+        y_bottom = max(y_left, y_middle) + 40
         x_bottom = 150
         
-        section_header = UIFactory.create_label(
+        UIFactory.create_label(
             "Payment", x_bottom, y_bottom, self.parent,
             "font-size: 18px; font-weight: bold; color: black;"
         )
@@ -177,15 +170,10 @@ class CheckoutPage:
             label.setStyleSheet("font-weight: bold; font-size: 10pt;")
             
             field = UIFactory.create_input_field(
-                x_bottom + 200,
-                y_bottom, 
-                input_width, 
-                input_height, 
-                self.parent
+                x_bottom + 200, y_bottom, input_width, input_height, self.parent
             )
             
             self.input_fields[field_key] = field
-            
             field.textChanged.connect(
                 lambda text, key=field_key: self._on_field_changed(key, text)
             )
@@ -193,11 +181,9 @@ class CheckoutPage:
             y_bottom += spacing
     
     def _on_field_changed(self, field_key, text):
-        """Saves input to CustomerData."""
         setattr(self.customer_data, field_key, text)
     
     def _auto_fill_from_login(self):
-        """Auto-fill from logged-in user."""
         if not self.login_page:
             return
         
@@ -205,6 +191,7 @@ class CheckoutPage:
         if not user:
             return
         
+        # Auto-fill user data
         if user.get('first_name'):
             self.input_fields['first_name'].setText(user['first_name'])
         
@@ -218,7 +205,6 @@ class CheckoutPage:
             self.input_fields['phone'].setText(user['phone'])
     
     def _go_back_to_login(self):
-        """Go back to login page."""
         self.stacked_widget.setCurrentIndex(2)
     
     def _confirm_booking(self):
@@ -230,6 +216,7 @@ class CheckoutPage:
         
         has_empty_fields = False
         
+        # Check all required fields
         for field_key in required_fields:
             field_value = getattr(self.customer_data, field_key, "")
             
@@ -242,52 +229,102 @@ class CheckoutPage:
         if has_empty_fields:
             return
         
+        # Save reservation to backend
+        self._save_reservation_to_backend()
+        
+        # Go to confirmation
         self.stacked_widget.setCurrentIndex(4)
+    
+    def _save_reservation_to_backend(self):
+        try:
+            # Create Address
+            address = Address(
+                street=self.customer_data.street,
+                city=self.customer_data.city,
+                state=self.customer_data.state,
+                zipcode=self.customer_data.zip_code,
+                country=self.customer_data.country
+            )
+            
+            # Create Customer
+            customer = Customer(
+                first_name=self.customer_data.first_name,
+                last_name=self.customer_data.last_name,
+                email=self.customer_data.email,
+                phone=self.customer_data.phone,
+                address=address
+            )
+            
+            # Convert dates to tuple format
+            check_in = self._date_to_tuple(self.booking_data.check_in)
+            check_out = self._date_to_tuple(self.booking_data.check_out)
+            
+            # Get room type
+            room_type = self.booking_data.selected_room['title']
+            
+            # Save to backend
+            result = self.reservation_controller.make_reservation(
+                customer=customer,
+                room_type=room_type,
+                check_in=check_in,
+                check_out=check_out
+            )
+            
+            # Save reservation ID
+            if result['status'] == 'success':
+                self.booking_data.reservation_id = result['reservation_id']
+        
+        except Exception as e:
+            print(f"Error saving reservation: {e}")
+    
+    def _date_to_tuple(self, date_string):
+        # Convert "2024-12-10" to (12, 10)
+        parts = date_string.split('-')
+        return (int(parts[1]), int(parts[2]))
     
     def _update_display(self):
         room = self.booking_data.selected_room
         
+        # Update room info
         if room:
             room_text = f"{room['title']}\n{room['description']}"
             self.room_info_label.setText(room_text)
         else:
             self.room_info_label.setText("(room details here)")
         
+        # Update check-in
         if self.booking_data.check_in:
             checkin_text = f"Check In: {self.booking_data.check_in}"
         else:
             checkin_text = "Check In: (not selected)"
-        
         self.checkin_label.setText(checkin_text)
         
+        # Update check-out
         if self.booking_data.check_out:
             checkout_text = f"Check Out: {self.booking_data.check_out}"
         else:
             checkout_text = "Check Out: (not selected)"
-        
         self.checkout_label.setText(checkout_text)
         
+        # Update guests
         guests_text = f"Guests: {self.booking_data.adults}"
         self.guests_label.setText(guests_text)
         
+        # Update nights
         nights = self.booking_data.calculate_nights()
-        
         if nights is not None:
             nights_text = f"Nights: {nights}"
         else:
             nights_text = "Nights: (not calculated)"
-        
         self.nights_label.setText(nights_text)
     
     def _flash_field_red(self, field):
         original_style = field.styleSheet()
         
-        red_style = (
-            "border: 3px solid #ff4444; "
-            "background-color: #ffebeb;"
-        )
+        red_style = "border: 3px solid #ff4444; background-color: #ffebeb;"
         field.setStyleSheet(red_style)
         
+        # Reset after 1 second
         QTimer.singleShot(1000, lambda: field.setStyleSheet(original_style))
     
     def _setup_show_event(self):

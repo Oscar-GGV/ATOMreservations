@@ -1,18 +1,3 @@
-"""main.py
-This file is the starting point of the Hotel Eleon booking application.
-It creates the main window and sets up navigation between different pages.
-
-Programmers: Astghik, Mahi
-Date of code: November 5th, 2025
-Modified: December 3rd, 2025 - Added login page and auto-fill integration
-
-Description:
-This file builds the main application window and creates all pages of the booking
-system. It uses a QStackedWidget to store these pages and lets users move between them
-by changing which page index is active. The pages are: home (0), rooms (1), login (2),
-checkout (3), confirmation (4), and register (5).
-"""
-
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QScrollArea
 from PyQt5.QtCore import Qt
@@ -25,62 +10,44 @@ from page_register import RegisterPage
 
 
 class HotelBookingApp:
-    """Main controller that sets up the whole application.
-    Creates the window, builds all pages, and handles the basic structure.
-    """
-
-    def __init__(self):
-        """Sets up the Qt application and builds the main window with all pages."""
-  
-        self.app = QApplication(sys.argv)
-        # This Qt object is required to run any GUI application
-        
-        # Setup main window and navigation
-        self._setup_main_window()
-        self._setup_pages() 
     
+    def __init__(self):
+        self.app = QApplication(sys.argv)
+        self._setup_main_window()
+        self._setup_pages()
     
     def _setup_main_window(self):
-        """Creates the main window and the stacked widget for page navigation."""
-        
-        self.main_window = QWidget()  # main application window
+        # Create main window
+        self.main_window = QWidget()
         self.main_window.setWindowTitle("Hotel Eleon - Booking System")
         self.main_window.resize(1920, 1080)
         
-        # QStackedWidget holds all pages but only shows one at a time
+        # Stack widget holds all pages
         self.stacked_widget = QStackedWidget(self.main_window)
         self.stacked_widget.setGeometry(0, 0, 1920, 1080)
     
-    
     def _setup_pages(self):
-        """Creates all pages and adds them to the navigation stack.
-        
-        Each page gets its own container widget and index number:
-        0 = Home, 1 = Rooms, 2 = Login, 3 = Checkout, 4 = Confirmation, 5 = Register
-        """
-        
         # Home page (index 0)
         page_home = QWidget()
         HomePage(page_home, self.stacked_widget)
         self.stacked_widget.addWidget(page_home)
         
-        # Room selection page (index 1) with scroll area
-        page_rooms_widget = QWidget()
-        RoomSelectionPage(page_rooms_widget, self.stacked_widget)
+        # Room selection page (index 1) - with scroll
+        page_rooms = QWidget()
+        RoomSelectionPage(page_rooms, self.stacked_widget)
         
-        # Wrap in scroll area so user can scroll if there are many rooms
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(page_rooms_widget)
+        scroll_area.setWidget(page_rooms)
         scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.stacked_widget.addWidget(scroll_area)
-    
+        
         # Login page (index 2)
         page_login = QWidget()
         self.login_page = LoginPage(page_login, self.stacked_widget)
         self.stacked_widget.addWidget(page_login)
         
-        # Checkout page (index 3) - Pass login_page reference for auto-fill
+        # Checkout page (index 3)
         page_checkout = QWidget()
         CheckoutPage(page_checkout, self.stacked_widget, self.login_page)
         self.stacked_widget.addWidget(page_checkout)
@@ -90,25 +57,20 @@ class HotelBookingApp:
         ConfirmationPage(page_confirmation, self.stacked_widget)
         self.stacked_widget.addWidget(page_confirmation)
         
-        # Registration page (index 5)
+        # Register page (index 5)
         page_register = QWidget()
         RegisterPage(page_register, self.stacked_widget)
         self.stacked_widget.addWidget(page_register)
-
-        # Start on home page
+        
+        # Start on home
         self.stacked_widget.setCurrentIndex(0)
     
-    
     def run(self):
-        """Shows the window and starts the application."""
-        
         self.main_window.show()
         sys.exit(self.app.exec_())
 
 
 def main():
-    """Creates the app and runs it."""
-    
     app = HotelBookingApp()
     app.run()
 

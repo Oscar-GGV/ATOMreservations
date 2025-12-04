@@ -2,3 +2,4 @@ username,password,role,first_name,last_name,email,phone,registered_date
 admin,Atomadmin123,admin,Admin,User,admin@hotel.com,,2025-10-22 18:59:07
 name,123,customer,fist,second,a@mail.com,,2025-12-03 11:41:47
 new,123,customer,firstname,lastname,a@mail.gov,123456,2025-12-03 14:29:59
+customer,admin123,customer,Customer,Eleon,adim@gmail.com,1234567890,2025-12-03 20:35:44
