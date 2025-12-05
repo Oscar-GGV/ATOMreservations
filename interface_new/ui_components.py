@@ -181,12 +181,19 @@ class RoomCard:
             desc_text, 10, 190, self.card,
             "font-size: 13px; border: none; background: transparent;"
         )
+
+        # FIXED - Price label bottom-left
+        price_label = UIFactory.create_label(
+            f"${room.price}/night", 150, 410, self.card,
+            "font-size: 14px; color: black; border: none; background: transparent;"
+        )
         
         # Select button
         select_btn = UIFactory.create_button(
             "Select", 100, 450, 100, 35, self.card
         )
         
+        # FIXED - Pass price to callback
         select_btn.clicked.connect(
-            lambda: on_select(room.title, room.description)
+            lambda: on_select(room.title, room.description, room.price)
         )

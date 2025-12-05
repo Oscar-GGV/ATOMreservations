@@ -73,11 +73,12 @@ class RoomSelectionPage:
         total_height = y_start + needed_rows * (room_height + spacing) + 100
         self.parent.setMinimumHeight(total_height)
     
-    def _on_room_selected(self, title: str, description: str):
+    def _on_room_selected(self, title: str, description: str, price: float):  # FIXED - added price parameter
         # Save selected room
         self.booking_data.selected_room = {
             "title": title, 
-            "description": description
+            "description": description,
+            "price": price  # FIXED - save price
         }
         
         # Go to login page

@@ -127,6 +127,15 @@ class ConfirmationPage:
             "font-size: 14px; color: black;"
         )
         self.payment_label.setFixedWidth(800)
+        y += spacing
+        
+        # ADDED - Total price
+        self.total_label = UIFactory.create_label(
+            "Total: (not calculated)",
+            x, y, self.parent,
+            "font-size: 16px; color: black;"
+        )
+        self.total_label.setFixedWidth(800)
         
         # New reservation button
         self.new_reservation_button = UIFactory.create_button(
@@ -212,6 +221,13 @@ class ConfirmationPage:
             self.payment_label.setText(f"Payment: ******{last_four}")
         else:
             self.payment_label.setText("Payment: (not provided)")
+        
+        # ADDED - Total price
+        total = self.booking_data.calculate_total_price()
+        if total is not None:
+            self.total_label.setText(f"Total: ${total:.2f}")
+        else:
+            self.total_label.setText("Total: (not calculated)")
     
     def _make_new(self):
         # Save dates and guests

@@ -1,0 +1,6 @@
+reservation_id,customer_email,room_type,check_in,check_out
+R0001,a@mail.gov,Double Room,12-08,12-25
+R0001,a@mail.gov,Double Room,12-15,12-17
+R0001,a@mail.gov,Double Room,12-15,12-25
+R0001,a@mail.gov,Double Room,12-10,12-18
+R0002,a@mail.gov,Family Room,12-10,12-18
