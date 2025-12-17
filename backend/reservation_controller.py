@@ -39,14 +39,8 @@ class ReservationController:
         """
         Make a reservation for a customer.
 
-        Args:
-            customer: a Customer object (expected)
-            room_type: str
-            check_in: (month, day) tuple
-            check_out: (month, day) tuple
-
-        Returns:
-            dict with status and reservation_id or reason
+        Args: customer: a Customer object (expected) room_type: str check_in: (month, day) tuple  check_out: (month, day) tuple
+Returns: dict with status and reservation_id or reason
         """
         if not customer:
             return {"status": "failed", "reason": "Invalid customer"}

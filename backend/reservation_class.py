@@ -6,12 +6,7 @@ Programmer: Oscar Guevara
 class Reservation:
     """
     Represents a reservation.
-    Attributes:
-        reservation_id (str): Unique ID for the reservation.
-        customer_email (str): Email of the customer who made the reservation.
-        room_type (str): Type of room reserved.
-        check_in (str): Check-in date (YYYY-MM-DD).
-        check_out (str): Check-out date (YYYY-MM-DD).
+    Attributes: reservation_id (str): Unique ID for the reservation. customer_email (str): Email of the customer who made the reservation. room_type (str): Type of room reserved. check_in (str):  check_out (str): 
     """
 
     def __init__(self, reservation_id, customer_email, room_type, check_in, check_out):
@@ -21,8 +16,7 @@ class Reservation:
         self.check_in = check_in
         self.check_out = check_out
 
-    #Convert to CSV row
-    def to_dict(self):
+    def to_dict(self): #makes object inro a dict
         return {
             "reservation_id": self.reservation_id,
             "customer_email": self.customer_email,
@@ -30,10 +24,9 @@ class Reservation:
             "check_in": self.check_in,
             "check_out": self.check_out,
         }
-
     #Create Reservation object From a csv ROw
     @staticmethod
-    def from_dict(data):
+    def from_dict(data): #makes dict back into object
         return Reservation(
             data["reservation_id"],
             data["customer_email"],

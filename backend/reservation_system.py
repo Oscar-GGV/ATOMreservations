@@ -3,22 +3,21 @@ This file contains the ReservationSystem class which manages reservations in the
 Programmers: Mike and Oscar
 date of code: November 5th, 2025
 adjusted November 10th, 2025"""
-from backend.database import Hotel
-from backend.calendar import store_booking_range
+from backend.database import Hotel, Room
+from backend.calendar import store_booking_range, get_booked_quantity
 from backend.customer import Customer
 
 reservation_counter = 1
-calendar_head = None
-
 
 class ReservationSystem:
     """Manages reservations and room availability in the hotel reservation system."""
     def __init__(self):
         """Initializes the ReservationSystem with a Hotel instance and reservation database."""
+        self.calendar_head = None
         self.hotel = Hotel()
         self.reservations_db = {}
 
-    def check_availability(self, room_type, check_in, check_out):
+    def check_availability(self, room_type, check_in, check_out): #check in has to be mm dd
         """Checks if a room type is available for the given date range.
         Parameters:
             room_type (str): The type of room to check availability for.
@@ -26,26 +25,27 @@ class ReservationSystem:
             check_out (tuple): The check-out date as (month, day).
         Returns:
             bool: True if the room type is available, False otherwise."""
-        global calendar_head
         total_quantity = sum(1 for room in self.hotel.rooms if room.room_type == room_type)
         month, day = check_in
         end_month, end_day = check_out
 
         while True:
-            booked = get_booked_quantity(month, day, {"name": room_type}, calendar_head)
+            booked = get_booked_quantity(month, day, room_type, self.calendar_head) #uses calendar.py function
             if booked >= total_quantity:
                 return False
 
             # Stop when reaching end date
             if (month, day) == (end_month, end_day):
                 break
-
+#this increments the day and handles the month rollover
             day += 1
-            if day > 30:  # Simplify month rollover
-                day, month = 1, month + 1
+            if day > 30:  # assume 30 days per month, this is done for simplicity
+                day = 1
+                month += 1
+                
         return True
 
-    def get_available_room_types(self, check_in, check_out, num_guests):
+    def get_available_room_types(self, check_in, check_out, num_guests): #FIX
         """Gets a list of available room types for the given date range and number of guests.
         Parameters:
             check_in (tuple): The check-in date as (month, day).
@@ -56,8 +56,8 @@ class ReservationSystem:
         available_rooms = []
         room_types = set(room.room_type for room in self.hotel.rooms)
 
-        for rtype in room_types:
-            sample_room = next(room for room in self.hotel.rooms if room.room_type == rtype)
+        for rtype in room_types: #rtype ~ roomtype iterates through room_types from room manager
+            sample_room = next(room for room in self.hotel.rooms if room.room_type == rtype) #
             if sample_room.max_guests >= num_guests and self.check_availability(rtype, check_in, check_out):
                 available_rooms.append({
                     "name": rtype,
@@ -82,8 +82,7 @@ class ReservationSystem:
             check_out (tuple): The check-out date as (month, day).
         Returns:
             str or None: The reservation ID if successful, None if the room type is not available."""
-        global calendar_head
-        if not self.check_availability(room_type, check_in, check_out):
+        if not self.check_availability(room_type, check_in, check_out): 
             return None
 
         rid = self.generate_reservation_id()
@@ -94,6 +93,5 @@ class ReservationSystem:
             "check_out": check_out
         }
 
-        calendar_head = store_booking_range(check_in[0], check_in[1], check_out[0], check_out[1],
-                                            {"name": room_type}, calendar_head)
+        self.calendar_head = store_booking_range(check_in[0], check_in[1], check_out[0], check_out[1], {"name": room_type}, self.calendar_head) ##NNEDS FIXCING
         return rid

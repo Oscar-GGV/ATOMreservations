@@ -19,46 +19,36 @@ class CustomerController:
 
     def add_customer(self, first_name, last_name, email, phone, address):
         """Adds a new customer to the system.
-            parameters:
-            first_name (str): The first name of the customer.
-            last_name (str): The last name of the customer.
-            email (str): The email address of the customer.
-            phone (str): The phone number of the customer.
-            address (Address): The address object of the customer.
-            returns:
-            bool: True if the customer was added successfully, False if a customer with the same email already exists."""
+            parameters:first_name (str): The first name of the customer. last_name (str): The last name of the customer. email (str): The email address of the customer. phone (str): The phone number of the customer. address (Address): The address object of the customer.
+            returns: bool: True if the customer was added successfully, False if a customer with the same email already exists."""
         exists = self.find_customer_by_email(email)
         if exists:
             return False #cant add customer if they already exist
-
+#else
         customer = Customer(first_name, last_name, email, phone, address) #creates customer object
-        self.customers.append(customer) #adds customer instance to customers list
+        self.customers.append(customer) #adds customer obj to customers list
 
     
         self.save_customers_to_csv(self.csv_file, customer) #saves customer to csv file
 
         return True
-
+#end of add custmer method
 
     
     def find_customer_by_email(self, email): 
         """Finds a customer by their email address.
-            parameters:
-            email (str): The email address of the customer to find.
-            returns:
-            Customer: The customer object if found, None otherwise."""
+            parameters: email (str): The email address of the customer to find.
+            returns: Customer: The customer object if found, None otherwise."""
         for customer in self.customers: # iterates through list
             if customer.email == email: # checks for email given
                 return customer # returns customer object
-        return None #customer wasn't found
+        return None #Customer not found, none works as false here
+    #end of find_custoemr_by_email method
     
     def update_customer(self, email, new_info): 
         """Updates a customer's information.
-            parameters:
-            email (str): The email address of the customer to update.
-            new_info (dict): A dictionary containing the new customer information.
-            returns:
-            bool: True if the customer was updated successfully, False if the customer was not found."""
+            parameters: email (str) new_info (dict): A dictionary containing the new customer information.
+            returns: bool: True if the customer was updated successfully, False if the customer was not found."""
         customer = self.find_customer_by_email(email) 
         if customer: #true if customer was found
             customer.first_name = new_info.get("first_name", customer.first_name)
@@ -68,23 +58,22 @@ class CustomerController:
             customer.address = new_info.get("address", customer.address)
             return True #after return True
         return False #customer not found return false/// maybe can add a new function later to deal with the fact that customer does not have an account
-    
+#end of update_customer method
     def remove_customer(self, email): 
         """Removes a customer from the system.
-            parameters:
-            email (str): The email address of the customer to remove.
-            returns:
-            bool: True if the customer was removed successfully, False if the customer was not found."""
-        customer = self.find_customer_by_email(email) #finds the customer object by calling on the find customer func
-        if customer: #should be true if customer was found V
+            parameters: email (str)
+            returns: bool: True if the customer was removed successfully, False if the customer was not found."""
+        customer = self.find_customer_by_email(email) #customer = customer object/ TRUE
+        if customer: #true
             self.customers.remove(customer) #removes from the list
+            self.save_all_customers_to_csv(self.csv_file) #added demeber 3rd to update csv after removal
             return True #return true because the remove was successful 
         return False #return false because customer does not exist in system /// could be updated later to connect to a customer not found func.
     
     def is_valid_email(self, email):
         """Validates the format of an email address.
             parameters:
-            email (str): The email address to validate.
+            email (str): 
             uses regular expressions to check for a valid email format.
             returns:
             bool: True if the email format is valid, False otherwise."""
@@ -117,9 +106,9 @@ class CustomerController:
                     )
 
                     self.customers.append(customer)
-        except FileNotFoundError:
+        except FileNotFoundError: #jusr in case the file does not exist or something else unexpected happens
             pass
-    def save_customers_to_csv(self, file_path, customer):
+    def save_customers_to_csv(self, file_path, customer): #IMPORTANT*** this only writes ONE customer
         """appends a new customer to the CSV file."""
         file_exists = False
         try:
@@ -145,7 +134,8 @@ class CustomerController:
                 'zipcode': customer.address.zipcode,
                 'country': customer.address.country
             })
-    def save_all_customers_to_csv(self, file_path):
+
+    def save_all_customers_to_csv(self, file_path): #THIS OVERWRITES THE WHOLE CSV FILE
         """rewrties the whole csv file with current customer."""
         with open(file_path, mode = 'w', newline = '') as file:
             fieldnames = ["first_name", "last_name", "email", "phone", "street", "city", "state", "zipcode", "country"]
